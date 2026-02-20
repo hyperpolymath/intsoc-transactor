@@ -1,0 +1,36 @@
+= intsoc-transactor - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{intsoc-transactor_2026,
+  author = {Jewell, Jonathan D.A.},
+  title = {intsoc-transactor},
+  year = {2026},
+  url = {https://github.com/hyperpolymath/intsoc-transactor},
+  license = {PMPL-1.0-or-later}
+}
+----
+
+== Harvard Style
+
+Jewell, J.D.A. (2026) _intsoc-transactor_ [Computer software]. Available at: https://github.com/hyperpolymath/intsoc-transactor
+
+== OSCOLA
+
+Jonathan D.A. Jewell, 'intsoc-transactor' (2026) <https://github.com/hyperpolymath/intsoc-transactor>
+
+== MLA
+
+Jewell, Jonathan D.A. "intsoc-transactor." 2026, github.com/hyperpolymath/intsoc-transactor.
+
+== APA 7
+
+Jewell, J.D.A. (2026). _intsoc-transactor_ [Computer software]. GitHub. https://github.com/hyperpolymath/intsoc-transactor
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]

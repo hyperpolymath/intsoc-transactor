@@ -1,0 +1,20 @@
+{
+  "tasks": {
+    "dev": "deno task rescript && tauri dev",
+    "build": "deno task rescript && tauri build",
+    "rescript": "npx rescript build",
+    "rescript:watch": "npx rescript build -w",
+    "rescript:clean": "npx rescript clean"
+  },
+  "imports": {
+    "@tauri-apps/api/": "npm:@tauri-apps/api@2/",
+    "@tauri-apps/plugin-shell": "npm:@tauri-apps/plugin-shell@2",
+    "@tauri-apps/plugin-dialog": "npm:@tauri-apps/plugin-dialog@2",
+    "@tauri-apps/plugin-fs": "npm:@tauri-apps/plugin-fs@2",
+    "@rescript/core": "npm:@rescript/core@1"
+  },
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true
+  }
+}

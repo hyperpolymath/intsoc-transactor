@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+
+[workspace]
+resolver = "2"
+members = [
+    "crates/intsoc-core",
+    "crates/intsoc-parser",
+    "crates/intsoc-fixer",
+    "crates/intsoc-nickel",
+    "crates/intsoc-git",
+    "crates/intsoc-api",
+    "crates/intsoc-cli",
+    # "gui/src-tauri",  # Enable when Tauri deps available
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"]
+license = "PMPL-1.0-or-later"
+repository = "https://github.com/hyperpolymath/intsoc-transactor"
+rust-version = "1.85"
+
+[workspace.dependencies]
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Async
+tokio = { version = "1", features = ["full"] }
+
+# Error handling
+thiserror = "2"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Date/time
+chrono = { version = "0.4", features = ["serde"] }
+
+# HTTP client
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# XML
+quick-xml = { version = "0.37", features = ["serialize"] }
+
+# Text parsing
+winnow = "0.6"
+
+# Diff
+similar = { version = "2", features = ["text"] }
+
+# Git
+gix = { version = "0.68", default-features = false, features = ["basic", "blocking-network-client"] }
+
+# Workspace crates
+intsoc-core = { path = "crates/intsoc-core" }
+intsoc-parser = { path = "crates/intsoc-parser" }
+intsoc-fixer = { path = "crates/intsoc-fixer" }
+intsoc-nickel = { path = "crates/intsoc-nickel" }
+intsoc-git = { path = "crates/intsoc-git" }
+intsoc-api = { path = "crates/intsoc-api" }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }

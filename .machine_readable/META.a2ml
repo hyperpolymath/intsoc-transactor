@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
+#
+# META.a2ml — Project meta-level information
+# Architecture decisions, design rationale, governance.
+
+[metadata]
+version = "0.1.0"
+last-updated = "2026-02-20"
+
+[project-info]
+type = "binary"
+languages = ["rust", "rescript", "nickel", "haskell", "idris2", "zig"]
+license = "PMPL-1.0-or-later"
+author = "Jonathan D.A. Jewell (hyperpolymath)"
+
+[architecture-decisions]
+adrs = [
+  { id = "ADR-001", title = "Use winnow over chumsky for text parsing", status = "accepted", date = "2026-02-20", rationale = "Lighter weight for document parsing, chumsky better for programming language parsers" },
+  { id = "ADR-002", title = "Use gix over git2-rs for Git integration", status = "accepted", date = "2026-02-20", rationale = "Pure Rust, no C libgit2 dependency" },
+  { id = "ADR-003", title = "Nickel only (drop Dhall)", status = "accepted", date = "2026-02-20", rationale = "3971 .ncl files in ecosystem, zero .dhall; Nickel contracts sufficient" },
+  { id = "ADR-004", title = "ReScript TEA over TypeScript+Svelte for frontend", status = "accepted", date = "2026-02-20", rationale = "TypeScript banned; ReScript TEA proven in panll" },
+  { id = "ADR-005", title = "Generalize to all IntSoc orgs, not just IETF", status = "accepted", date = "2026-02-20", rationale = "IETF, IRTF, IAB, Independent, IANA, RFC Editor share infrastructure" },
+  { id = "ADR-006", title = "AutoSafe/Recommended/ManualOnly fix classification", status = "accepted", date = "2026-02-20", rationale = "Clear safety levels for automated fixes" },
+  { id = "ADR-007", title = "Haskell megaparsec deferred to Phase 2", status = "accepted", date = "2026-02-20", rationale = "winnow+quick-xml sufficient for MVP; megaparsec adds ABNF/BNF parsing later" },
+]
+
+[development-practices]
+build-tool = "just"
+container-runtime = "podman"
+ci-platform = "github-actions"
+package-manager = "cargo"
+
+[design-rationale]
+# Two PRDs reconciled into single generalized tool:
+# PRD 1 (IETF Draft Auto-Correction Tool Suite): Fix classification system
+# PRD 2 (IETF Forge): Nickel Framework Editor as template/policy layer
+# Result: AutoSafe/Recommended/ManualOnly + Nickel contracts + all IntSoc orgs

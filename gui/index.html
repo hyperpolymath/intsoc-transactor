@@ -1,0 +1,53 @@
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>intsoc-transactor</title>
+
+    <!-- Tailwind CSS via CDN (development; replace with built CSS for production) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      /* Prevent text selection on double-click for UI elements */
+      button, nav, header, footer {
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      /* Custom scrollbar for code/diff areas */
+      pre::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      pre::-webkit-scrollbar-track {
+        background: #1a1a2e;
+      }
+      pre::-webkit-scrollbar-thumb {
+        background: #4a4a6a;
+        border-radius: 4px;
+      }
+
+      /* Spinner animation for loading states */
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .animate-spin {
+        animation: spin 1s linear infinite;
+      }
+
+      /* Diff highlighting classes (for future use with structured diffs) */
+      .diff-add { background-color: #d4edda; color: #155724; }
+      .diff-del { background-color: #f8d7da; color: #721c24; }
+      .diff-context { background-color: transparent; }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900 antialiased">
+    <!-- TEA application mount point -->
+    <div id="app"></div>
+
+    <!-- ReScript compiled entry point -->
+    <script type="module" src="/src/App.res.js"></script>
+  </body>
+</html>

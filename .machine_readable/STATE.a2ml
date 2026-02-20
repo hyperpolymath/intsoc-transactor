@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
+#
+# STATE.a2ml — Project state checkpoint
+
+[metadata]
+project = "intsoc-transactor"
+version = "0.1.0"
+last-updated = "2026-02-20"
+status = "active"
+
+[project-context]
+name = "intsoc-transactor"
+purpose = "Internet Society document transactor — check, fix, and submit documents across IETF, IRTF, IAB, Independent, IANA, and RFC Editor streams"
+completion-percentage = 40
+
+[position]
+phase = "implementation"
+maturity = "experimental"
+
+[route-to-mvp]
+milestones = [
+  { name = "Project scaffolding", completion = 100 },
+  { name = "Core domain model (intsoc-core)", completion = 100 },
+  { name = "XML/plain-text parser (intsoc-parser)", completion = 80 },
+  { name = "Fix engine (intsoc-fixer)", completion = 70 },
+  { name = "Nickel integration", completion = 50 },
+  { name = "CLI (intsoc-cli)", completion = 60 },
+  { name = "API clients (intsoc-api)", completion = 40 },
+  { name = "Git integration (intsoc-git)", completion = 30 },
+  { name = "GUI (Tauri + ReScript TEA)", completion = 20 },
+  { name = "Haskell parser helpers (Phase 2)", completion = 5 },
+  { name = "Idris2 ABI + Zig FFI (Phase 3)", completion = 5 },
+  { name = "Testing", completion = 10 },
+  { name = "Documentation", completion = 30 },
+]
+
+[blockers-and-issues]
+# No blockers currently
+
+[critical-next-actions]
+actions = [
+  "Get cargo build --workspace to compile clean",
+  "Add integration tests with real IETF I-D test fixtures",
+  "Complete Nickel template rendering pipeline",
+  "Wire up Tauri GUI commands to parser/fixer",
+  "Test against draft-jewell-http-430-consent-required-00.xml",
+]
+
+[ecosystem]
+part-of = ["RSR Framework", "hyperpolymath standards tooling"]
+depends-on = ["nickel", "gix", "quick-xml", "winnow", "tauri"]

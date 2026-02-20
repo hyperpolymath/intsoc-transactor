@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+
+[package]
+name = "intsoc-fixer"
+description = "Fix engine with AutoSafe/Recommended/ManualOnly classification and plan/apply/undo pipeline"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+intsoc-core = { workspace = true }
+intsoc-parser = { workspace = true }
+similar = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[lints]
+workspace = true

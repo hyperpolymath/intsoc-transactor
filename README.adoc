@@ -1,0 +1,99 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= intsoc-transactor
+Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
+:toc: left
+:toclevels: 3
+:icons: font
+
+== Internet Society Transactor
+
+Check, fix, and submit documents across all Internet Society streams:
+IETF, IRTF, IAB, Independent Stream, IANA, and RFC Editor.
+
+=== Features
+
+* **Multi-stream support** — Not just IETF. Handles IRTF Research Groups, IAB documents, Independent Stream submissions, IANA registry requests, and RFC Editor workflows.
+* **Parse RFC XML v3 and plain text** — Full RFC 7991 XML parser plus winnow-based plain-text parser.
+* **Smart fix classification** — Every fix is classified as AutoSafe (zero risk), Recommended (review advised), or ManualOnly (human required).
+* **Nickel-powered templates** — Type-checked contracts, per-stream templates, and policy validation via Nickel.
+* **State machine tracking** — Full lifecycle tracking with per-stream state machines (IETF: 20+ states, IRTF: 8, IAB: 4, etc.).
+* **Desktop GUI** — Tauri 2.0 + ReScript TEA architecture with document editor, checker, and fixer views.
+* **Pure Rust dependencies** — gix (not git2-rs), reqwest with rustls (not openssl).
+
+=== Quick Start
+
+[source,bash]
+----
+# Check a document
+cargo run -p intsoc-cli -- check path/to/draft.xml
+
+# Fix auto-safe issues
+cargo run -p intsoc-cli -- fix --auto-only path/to/draft.xml
+
+# Preview all fixes (dry run)
+cargo run -p intsoc-cli -- fix --dry-run path/to/draft.xml
+
+# Check submission status
+cargo run -p intsoc-cli -- status draft-jewell-http-430-consent-required-00
+
+# Initialize a new draft
+cargo run -p intsoc-cli -- init draft-jewell-new-feature-00 --stream individual
+----
+
+=== Architecture
+
+[source]
+----
+crates/
+  intsoc-core/      # Domain model, state machines, validation framework
+  intsoc-parser/    # RFC XML v3, plain-text, idnits output parsing
+  intsoc-fixer/     # Fix engine (AutoSafe/Recommended/ManualOnly)
+  intsoc-nickel/    # Nickel template rendering + policy validation
+  intsoc-git/       # Git integration via gix
+  intsoc-api/       # IETF Datatracker + IANA API clients
+  intsoc-cli/       # CLI binary (intsoc check/fix/submit/status/init)
+gui/
+  src/              # ReScript TEA frontend
+  src-tauri/        # Tauri 2.0 desktop app
+nickel/
+  contracts/        # Type contracts for metadata validation
+  templates/        # Per-stream document templates
+  policies/         # Submission rules per organization
+haskell/            # Megaparsec parser helpers (Phase 2)
+src/abi/            # Idris2 ABI definitions (Phase 3)
+ffi/zig/            # Zig FFI implementation (Phase 3)
+----
+
+=== Supported Streams
+
+[cols="1,1,2"]
+|===
+| Organization | Streams | Key Characteristics
+
+| IETF | Individual, WG, Standards Track, Informational, Experimental, BCP, BIS | 20+ lifecycle states, idnits validation
+| IRTF | Research Group, Individual | 8 states, IRSG review
+| IAB | Document, Statement | 4 states, IAB review
+| Independent | Submission (RFC 4846) | 5 states, ISE review
+| IANA | Registry Request, Parameter Assignment | 6 states, expert review
+| RFC Editor | Errata, Editorial | Editorial stream
+|===
+
+=== Building
+
+[source,bash]
+----
+# Build all crates
+cargo build --workspace
+
+# Run tests
+cargo test --workspace
+
+# Build release
+cargo build --workspace --release
+----
+
+=== License
+
+PMPL-1.0-or-later (Palimpsest License)
+
+Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>

@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
+#
+# ECOSYSTEM.a2ml — Project ecosystem position
+
+[metadata]
+version = "0.1.0"
+last-updated = "2026-02-20"
+
+[project]
+name = "intsoc-transactor"
+purpose = "Internet Society document checking, fixing, and submission across all streams"
+role = "cli-tool"
+
+[position-in-ecosystem]
+tier = "2"
+
+[related-projects]
+projects = [
+  { name = "standards", relationship = "sibling-standard", notes = "Contains real IETF I-D test fixtures (e.g., draft-jewell-http-430)" },
+  { name = "nickel-augmentation", relationship = "dependency", notes = "Nickel contract patterns and templates" },
+  { name = "hypatia", relationship = "potential-consumer", notes = "Neurosymbolic CI/CD could run intsoc checks" },
+  { name = "gitbot-fleet", relationship = "potential-consumer", notes = "Bots could automate I-D submission workflows" },
+  { name = "panic-attacker", relationship = "sibling-standard", notes = "Security scanning for draft implementations" },
+  { name = "verisimdb", relationship = "potential-consumer", notes = "Could track I-D verification results" },
+  { name = "panll", relationship = "inspiration", notes = "TEA runtime architecture for GUI" },
+]
+
+[integration-points]
+integrations = [
+  { system = "IETF Datatracker", direction = "outbound", protocol = "REST API" },
+  { system = "IANA Registry", direction = "outbound", protocol = "REST API" },
+  { system = "RFC Editor", direction = "outbound", protocol = "REST API" },
+  { system = "gitbot-fleet", direction = "outbound", protocol = "repository_dispatch" },
+]

@@ -1,0 +1,131 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# ⚠️ STOP - CRITICAL READING REQUIRED
+
+**THIS FILE MUST BE READ FIRST BY ALL AI AGENTS**
+
+## WHAT IS THIS?
+
+This is the AI manifest for **intsoc-transactor**. It declares:
+- Canonical file locations (where things MUST be, and nowhere else)
+- Critical invariants (rules that must NEVER be violated)
+- Repository structure and organization
+
+## PROJECT OVERVIEW
+
+**intsoc-transactor** is the Internet Society Transactor — a tool suite for
+checking, fixing, and submitting documents across all Internet Society
+organizations: IETF, IRTF, IAB, Independent Stream, IANA, and RFC Editor.
+
+Key capabilities:
+- Parse RFC XML v3 and plain-text Internet-Drafts
+- Validate against stream-specific rules (boilerplate, sections, dates, naming)
+- Auto-fix issues with AutoSafe/Recommended/ManualOnly classification
+- Submit to IETF Datatracker and other endpoints
+- Nickel-based templates and policy validation
+- Desktop GUI via Tauri 2.0 + ReScript TEA architecture
+
+## CANONICAL LOCATIONS (UNIVERSAL RULE)
+
+### Machine-Readable Metadata: `.machine_readable/` ONLY
+
+These 6 a2ml files MUST exist in `.machine_readable/` directory ONLY:
+1. **STATE.a2ml** - Project state, progress, blockers
+2. **META.a2ml** - Architecture decisions, governance
+3. **ECOSYSTEM.a2ml** - Position in ecosystem, relationships
+4. **AGENTIC.a2ml** - AI agent interaction patterns
+5. **NEUROSYM.a2ml** - Neurosymbolic integration config
+6. **PLAYBOOK.a2ml** - Operational runbook
+
+**CRITICAL:** If ANY of these files exist in the root directory, this is an ERROR.
+
+### Bot Directives: `.machine_readable/bot_directives/` ONLY
+
+Bot-specific instructions for automated agents (echidnabot, rhodibot, etc.)
+
+### Contractiles: `.machine_readable/contractiles/` ONLY
+
+Policy enforcement contracts: k9, dust, lust, must, trust
+
+### Agent Instructions
+
+- `.claude/CLAUDE.md` - Claude-specific patterns (if exists)
+- `0-AI-MANIFEST.a2ml` - THIS FILE (universal entry point)
+
+## CORE INVARIANTS
+
+1. **No state file duplication** - Root must NOT contain STATE.a2ml, META.a2ml, etc.
+2. **Single source of truth** - `.machine_readable/` is authoritative
+3. **License consistency** - All code PMPL-1.0-or-later
+4. **Author attribution** - Always "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"
+5. **No banned languages** - No TypeScript, no Node.js, no Python, no Go
+6. **Container standard** - Containerfile (never Dockerfile), Podman (never Docker)
+7. **ABI/FFI standard** - Idris2 ABI + Zig FFI for foreign interfaces
+
+## REPOSITORY STRUCTURE
+
+```
+intsoc-transactor/
+├── 0-AI-MANIFEST.a2ml         # THIS FILE (start here)
+├── Cargo.toml                 # Workspace root
+├── README.adoc                # Project overview
+├── Justfile                   # Build recipes
+├── Containerfile              # Container build
+├── nickel/                    # Nickel templates, contracts, policies
+│   ├── contracts/             # Type contracts
+│   ├── templates/             # Per-stream templates
+│   └── policies/              # Submission policies
+├── crates/                    # Rust workspace
+│   ├── intsoc-core/           # Domain model, state machines
+│   ├── intsoc-parser/         # XML v3 + plain-text parsing
+│   ├── intsoc-fixer/          # Fix engine (AutoSafe/Recommended/ManualOnly)
+│   ├── intsoc-nickel/         # Nickel template rendering
+│   ├── intsoc-git/            # Git integration (gix)
+│   ├── intsoc-api/            # Datatracker + IANA API clients
+│   └── intsoc-cli/            # CLI binary
+├── gui/                       # Desktop GUI
+│   ├── src/                   # ReScript TEA frontend
+│   └── src-tauri/             # Tauri 2.0 backend
+├── haskell/                   # Haskell parser helpers (Phase 2)
+├── src/abi/                   # Idris2 ABI definitions (Phase 3)
+├── ffi/zig/                   # Zig FFI implementation (Phase 3)
+└── .machine_readable/         # ALL machine-readable content
+    ├── STATE.a2ml
+    ├── META.a2ml
+    ├── ECOSYSTEM.a2ml
+    ├── AGENTIC.a2ml
+    ├── NEUROSYM.a2ml
+    ├── PLAYBOOK.a2ml
+    ├── bot_directives/
+    └── contractiles/
+```
+
+## SESSION STARTUP CHECKLIST
+
+✅ Read THIS file (0-AI-MANIFEST.a2ml) first
+✅ Understand canonical location: `.machine_readable/` (state, bots, contractiles)
+✅ Know the invariants (no state file duplication, etc.)
+✅ Read `.machine_readable/STATE.a2ml` for current status
+✅ Read `.machine_readable/AGENTIC.a2ml` for interaction patterns
+
+## LIFECYCLE HOOKS
+
+### on-enter (Session Start)
+
+1. Read and acknowledge this manifest
+2. Read `.machine_readable/STATE.a2ml`
+3. Check for blockers
+4. State understanding of canonical locations
+
+### on-exit (Session End)
+
+1. Update `.machine_readable/STATE.a2ml` if changes made
+2. Document new blockers
+3. Summarize outcomes
+
+## META
+
+- **Format Version:** 1.0.0
+- **Created:** 2026-02-20
+- **Maintained By:** Jonathan D.A. Jewell (hyperpolymath)
+- **License:** PMPL-1.0-or-later
+- **Protocol:** https://github.com/hyperpolymath/0-ai-gatekeeper-protocol
