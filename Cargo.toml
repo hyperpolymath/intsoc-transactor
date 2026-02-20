@@ -55,7 +55,7 @@ winnow = "0.6"
 similar = { version = "2", features = ["text"] }
 
 # Git
-gix = { version = "0.68", default-features = false, features = ["basic", "blocking-network-client"] }
+gix = { version = "0.79", default-features = false, features = ["basic", "blocking-network-client"] }
 
 # Workspace crates
 intsoc-core = { path = "crates/intsoc-core" }
