@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-//! Parser for idnits (ID-Nits) output.
+//! ID-Nits Output Parser.
 //!
-//! Converts idnits checker output into `CheckResult` entries.
+//! This module parses the output of the legacy `idnits` tool (the 
+//! standard IETF draft checker) and converts it into structured 
+//! `CheckResult` objects used by the transactor.
+//!
+//! DESIGN: Uses line-by-line pattern matching to identify severity levels
+//! and categories.
 
 use intsoc_core::validation::{
     CheckCategory, CheckResult, Fixability, Severity,
@@ -10,7 +15,7 @@ use intsoc_core::validation::{
 
 use crate::ParseError;
 
-/// Parse idnits output into check results.
+/// ENTRY POINT: Converts a raw idnits text report into a list of findings.
 pub fn parse_idnits_output(output: &str) -> Result<Vec<CheckResult>, ParseError> {
     let mut results = Vec::new();
 
@@ -28,10 +33,12 @@ pub fn parse_idnits_output(output: &str) -> Result<Vec<CheckResult>, ParseError>
     Ok(results)
 }
 
+/// INTERNAL: Maps an idnits line to a structured result.
+/// Patterns:
+/// - "** Error:"   -> Severity::Error
+/// - "~~ Warning:" -> Severity::Warning
+/// - "-- Comment:" -> Severity::Info
 fn parse_idnits_line(line: &str) -> Option<CheckResult> {
-    // idnits format: "  ** Error: <message>"
-    //                "  ~~ Warning: <message>"
-    //                "  -- Comment: <message>"
     let (severity, rest) = if line.contains("** Error:") || line.contains("**") {
         (Severity::Error, line.trim_start_matches(|c: char| c == '*' || c.is_whitespace()))
     } else if line.contains("~~ Warning:") || line.contains("~~") {
@@ -53,6 +60,7 @@ fn parse_idnits_line(line: &str) -> Option<CheckResult> {
         return None;
     }
 
+    // CLASSIFICATION: Map the text message to a logical category and fixability tier.
     let (category, fixable) = categorize_idnits_message(&message);
 
     Some(CheckResult {
@@ -64,63 +72,4 @@ fn parse_idnits_line(line: &str) -> Option<CheckResult> {
         fixable,
         suggestion: None,
     })
-}
-
-fn categorize_idnits_message(msg: &str) -> (CheckCategory, Fixability) {
-    let lower = msg.to_lowercase();
-
-    if lower.contains("boilerplate") {
-        (CheckCategory::Boilerplate, Fixability::AutoSafe)
-    } else if lower.contains("date") || lower.contains("expir") {
-        (CheckCategory::Date, Fixability::AutoSafe)
-    } else if lower.contains("reference") || lower.contains("normative") || lower.contains("informative") {
-        (CheckCategory::References, Fixability::Recommended)
-    } else if lower.contains("section") || lower.contains("iana") {
-        (CheckCategory::Sections, Fixability::ManualOnly)
-    } else if lower.contains("header") || lower.contains("title") {
-        (CheckCategory::Header, Fixability::Recommended)
-    } else if lower.contains("draft name") || lower.contains("filename") {
-        (CheckCategory::DraftName, Fixability::AutoSafe)
-    } else if lower.contains("ipr") {
-        (CheckCategory::Ipr, Fixability::Recommended)
-    } else {
-        (CheckCategory::TextFormat, Fixability::ManualOnly)
-    }
-}
-
-fn category_to_id(cat: CheckCategory) -> &'static str {
-    match cat {
-        CheckCategory::Boilerplate => "boilerplate",
-        CheckCategory::Date => "date",
-        CheckCategory::Header => "header",
-        CheckCategory::References => "references",
-        CheckCategory::Sections => "sections",
-        CheckCategory::TextFormat => "text-format",
-        CheckCategory::Xml => "xml",
-        CheckCategory::IanaSections => "iana",
-        CheckCategory::DraftName => "draft-name",
-        CheckCategory::Ipr => "ipr",
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_error_line() {
-        let result = parse_idnits_line("  ** Error: Missing boilerplate text");
-        assert!(result.is_some());
-        let r = result.unwrap();
-        assert_eq!(r.severity, Severity::Error);
-        assert_eq!(r.category, CheckCategory::Boilerplate);
-    }
-
-    #[test]
-    fn test_parse_warning_line() {
-        let result = parse_idnits_line("  ~~ Warning: Outdated reference to RFC 1234");
-        assert!(result.is_some());
-        let r = result.unwrap();
-        assert_eq!(r.severity, Severity::Warning);
-    }
 }

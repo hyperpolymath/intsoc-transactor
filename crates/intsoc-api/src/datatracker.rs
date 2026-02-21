@@ -1,26 +1,29 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-//! IETF Datatracker API client.
+//! IETF Datatracker REST API Client.
 //!
-//! API documentation: https://datatracker.ietf.org/api/
+//! Implements high-level operations against the authoritative IETF document 
+//! management system. Supports both authenticated and public read-only access.
+//!
+//! API REF: https://datatracker.ietf.org/api/
 
 use crate::ApiError;
 use serde::{Deserialize, Serialize};
 
 const BASE_URL: &str = "https://datatracker.ietf.org";
 
-/// IETF Datatracker API client.
+/// The primary interface for interacting with the Datatracker.
 pub struct DataTrackerClient {
     client: reqwest::Client,
     base_url: String,
 }
 
-/// Document metadata from the Datatracker.
+/// Aggregated metadata for an Internet-Draft or RFC.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DraftInfo {
     pub name: String,
     pub title: String,
-    pub rev: String,
+    pub rev: String, // Revision number (e.g. "00")
     pub pages: Option<u32>,
     pub time: String,
     pub expires: Option<String>,
@@ -29,16 +32,16 @@ pub struct DraftInfo {
     pub intended_std_level: Option<String>,
 }
 
-/// Working group information.
+/// Metadata for the Working Group or Research Group responsible for a document.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GroupInfo {
     pub acronym: String,
     pub name: String,
     #[serde(rename = "type")]
-    pub group_type: String,
+    pub group_type: String, // e.g. "wg", "rg", "area"
 }
 
-/// Submission status from the Datatracker.
+/// Represents the status of a specific document submission attempt.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SubmissionStatus {
     pub id: u64,
@@ -49,7 +52,7 @@ pub struct SubmissionStatus {
 }
 
 impl DataTrackerClient {
-    /// Create a new Datatracker client.
+    /// FACTORY: Initializes a client with a standard user-agent.
     #[must_use]
     pub fn new() -> Self {
         Self {
@@ -61,7 +64,7 @@ impl DataTrackerClient {
         }
     }
 
-    /// Look up a draft by name.
+    /// LOOKUP: Retrieves full metadata for a document by its name (e.g., "draft-ietf-httpbis-brotli").
     pub async fn get_draft(&self, name: &str) -> Result<DraftInfo, ApiError> {
         let url = format!("{}/api/v1/doc/document/{name}/", self.base_url);
         let resp = self.client.get(&url).send().await?;
@@ -80,7 +83,7 @@ impl DataTrackerClient {
         Ok(resp.json().await?)
     }
 
-    /// Get the submission status of a draft.
+    /// STATUS: Lists all submission events for a given document name.
     pub async fn submission_status(&self, name: &str) -> Result<Vec<SubmissionStatus>, ApiError> {
         let url = format!(
             "{}/api/v1/submit/submission/?name={name}&format=json",
@@ -104,7 +107,7 @@ impl DataTrackerClient {
         Ok(list.objects)
     }
 
-    /// Check if a draft name is available.
+    /// UTILITY: Checks if a document name is currently unused in the Datatracker.
     pub async fn is_name_available(&self, name: &str) -> Result<bool, ApiError> {
         match self.get_draft(name).await {
             Ok(_) => Ok(false),

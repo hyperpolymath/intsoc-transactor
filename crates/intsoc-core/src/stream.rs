@@ -2,38 +2,39 @@
 
 //! Submission streams for Internet Society documents.
 //!
-//! Each organization has one or more submission streams with distinct
-//! workflows, boilerplate requirements, and state machines.
+//! This module defines the various "Streams" available for document submission.
+//! Each stream (IETF, IRTF, Independent, etc.) has its own governance,
+//! boilerplate requirements, and expected name prefixes.
 
 use crate::organization::Organization;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-/// All submission streams across Internet Society organizations.
+/// All formal submission streams across Internet Society organizations.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(tag = "type", content = "detail")]
 pub enum Stream {
-    // -- IETF streams --
-    /// Individual submission (no working group sponsorship)
+    // -- IETF STREAMS (RFC 2026) --
+    /// Standard individual submission
     IetfIndividual,
-    /// Working group document
+    /// Working group sponsored document
     IetfWorkingGroup {
         /// The working group abbreviation (e.g., "httpbis")
         wg: String,
     },
-    /// Standards Track document
+    /// Standards Track (Proposed Standard, Internet Standard)
     IetfStandardsTrack {
         wg: Option<String>,
     },
-    /// Informational document
+    /// Informational document (RFC 2026 Section 4.2.2)
     IetfInformational {
         wg: Option<String>,
     },
-    /// Experimental document
+    /// Experimental document (RFC 2026 Section 4.2.1)
     IetfExperimental {
         wg: Option<String>,
     },
-    /// Best Current Practice
+    /// Best Current Practice (RFC 2026 Section 5)
     IetfBcp {
         wg: Option<String>,
     },
@@ -42,47 +43,45 @@ pub enum Stream {
         obsoletes: Vec<u32>,
     },
 
-    // -- IRTF streams --
-    /// Research Group document
+    // -- IRTF STREAMS (RFC 5743) --
+    /// Official Research Group document
     IrtfResearchGroup {
-        /// The research group abbreviation
         rg: String,
     },
-    /// IRTF individual document
+    /// Individual submission to the IRTF stream
     IrtfIndividual,
 
-    // -- IAB streams --
-    /// IAB document
+    // -- IAB STREAMS (RFC 4845) --
+    /// Formal IAB document
     IabDocument,
-    /// IAB informational statement
+    /// IAB informational statement or opinion
     IabStatement,
 
-    // -- Independent --
-    /// Independent submission (RFC 4846 stream)
+    // -- INDEPENDENT STREAM (RFC 4846) --
+    /// Independent submission (non-IETF sponsored)
     IndependentSubmission,
 
-    // -- IANA --
-    /// IANA registry request
+    // -- IANA (Non-RFC stream) --
+    /// Request for a new IANA registry
     IanaRegistryRequest {
-        /// Target registry name
         registry: String,
     },
-    /// IANA protocol parameter assignment
+    /// Protocol parameter assignment in an existing registry
     IanaParameterAssignment {
         registry: String,
     },
 
-    // -- RFC Editor --
-    /// RFC Editor errata
+    // -- RFC EDITOR STREAMS (RFC 8729) --
+    /// Official errata for an existing RFC
     RfcEditorErrata {
         rfc: u32,
     },
-    /// Editorial stream document
+    /// Document originating from the RFC Editor's editorial stream
     RfcEditorEditorial,
 }
 
 impl Stream {
-    /// Returns the organization responsible for this stream.
+    /// Returns the organization responsible for managing this stream.
     #[must_use]
     pub fn organization(&self) -> Organization {
         match self {
@@ -108,7 +107,8 @@ impl Stream {
         }
     }
 
-    /// Returns the draft name prefix for this stream (e.g., "draft-ietf-httpbis-").
+    /// Returns the standardized draft name prefix for this stream.
+    /// Example: `draft-ietf-httpbis-` for an IETF WG document.
     #[must_use]
     pub fn draft_prefix(&self, author_last_name: &str) -> Option<String> {
         match self {
@@ -125,7 +125,7 @@ impl Stream {
         }
     }
 
-    /// Returns the required boilerplate text identifier for this stream.
+    /// Returns the IETF Trust boilerplate ID required for the document header.
     #[must_use]
     pub fn boilerplate_id(&self) -> &'static str {
         match self.organization() {

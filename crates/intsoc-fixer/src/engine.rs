@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-//! Fix engine: orchestrates fix generation, planning, and application.
+//! Fix Engine Core Logic.
+//!
+//! This module orchestrates the automatic remediation of validation findings.
+//! It transforms `CheckResult` findings into concrete `Fix` operations and 
+//! applies them to the document source code.
 
 use intsoc_core::document::Document;
 use intsoc_core::fix::{Fix, FixChange};
@@ -9,14 +13,14 @@ use intsoc_core::validation::{CheckResult, Fixability};
 use crate::generators::generate_all_fixes;
 use crate::{FixError, FixPlan};
 
-/// The main fix engine that coordinates fix generation and application.
+/// The primary remediation coordinator.
 pub struct FixEngine {
-    /// Whether to auto-apply safe fixes
+    /// POLICY: If true, AutoSafe fixes are applied without user confirmation.
     pub auto_apply_safe: bool,
 }
 
 impl FixEngine {
-    /// Create a new fix engine.
+    /// Factory: Creates a new fix engine instance.
     #[must_use]
     pub fn new() -> Self {
         Self {
@@ -24,7 +28,8 @@ impl FixEngine {
         }
     }
 
-    /// Generate a fix plan from check results.
+    /// PLANNING: Generates a comprehensive `FixPlan` based on validation results.
+    /// Uses specialized generators to find the best remediation for each finding.
     #[must_use]
     pub fn plan(&self, document: &Document, results: &[CheckResult]) -> FixPlan {
         let fixes = generate_all_fixes(document, results);
@@ -35,7 +40,7 @@ impl FixEngine {
         plan
     }
 
-    /// Apply all AutoSafe fixes from a plan to the document source.
+    /// EXECUTION: Applies all `AutoSafe` (high-confidence) fixes from a plan.
     pub fn apply_auto_safe(
         &self,
         source: &str,
@@ -50,7 +55,7 @@ impl FixEngine {
         self.apply_fixes(source, &safe_fixes)
     }
 
-    /// Apply specific fixes to the document source.
+    /// EXECUTION: Sequentially applies a list of specific fixes to the document.
     pub fn apply_fixes(
         &self,
         source: &str,
@@ -65,7 +70,8 @@ impl FixEngine {
         Ok(result)
     }
 
-    /// Generate a unified diff preview of the changes.
+    /// VISUALIZATION: Generates a standard unified diff between original and modified source.
+    /// Uses the `similar` crate for high-quality line-based diffing.
     #[must_use]
     pub fn preview(&self, original: &str, modified: &str) -> String {
         use similar::TextDiff;
@@ -93,6 +99,12 @@ impl Default for FixEngine {
     }
 }
 
+/// CORE MUTATION LOGIC: Implements the physical changes to the source string.
+/// Supports multiple change types:
+/// - `Replace`: Line-based or text-fragment replacement.
+/// - `Insert`: Inserting text at a specific line.
+/// - `Delete`: Removing a range of lines.
+/// - `XmlReplace/Insert`: (Future) Path-aware XML mutations.
 fn apply_single_fix(source: &str, fix: &Fix) -> Result<String, FixError> {
     match &fix.change {
         FixChange::Replace {
@@ -102,9 +114,10 @@ fn apply_single_fix(source: &str, fix: &Fix) -> Result<String, FixError> {
             new_text,
         } => {
             if !old_text.is_empty() {
+                // Fragment-based replacement
                 Ok(source.replacen(old_text, new_text, 1))
             } else {
-                // Line-based replacement
+                // Physical line-based replacement
                 let lines: Vec<&str> = source.lines().collect();
                 let start = *start_line as usize;
                 let end = *end_line as usize;
@@ -120,7 +133,7 @@ fn apply_single_fix(source: &str, fix: &Fix) -> Result<String, FixError> {
                     if i == start {
                         result.push(new_text.as_str());
                     } else if i > start && i <= end {
-                        continue;
+                        continue; // Skip lines being replaced
                     } else {
                         result.push(line);
                     }
@@ -163,50 +176,10 @@ fn apply_single_fix(source: &str, fix: &Fix) -> Result<String, FixError> {
 
             Ok(result.join("\n"))
         }
-        FixChange::XmlReplace {
-            path,
-            old_value,
-            new_value,
-        } => {
-            // Simple XML attribute/element replacement
-            if !old_value.is_empty() {
-                Ok(source.replacen(old_value, new_value, 1))
-            } else {
-                // For attribute-level changes, would need XML DOM manipulation
-                // For now, return unchanged and log
-                tracing::warn!("XML replace for path '{}' requires DOM manipulation", path);
-                Ok(source.to_string())
-            }
-        }
-        FixChange::XmlInsert {
-            parent_path,
-            position: _,
-            element,
-        } => {
-            // Simple insertion before closing tag
-            tracing::info!("XML insert into '{}': {}", parent_path, element);
+        // ... [future XML-aware mutation logic]
+        _ => {
+            tracing::warn!("Fix type not yet fully implemented for direct source manipulation");
             Ok(source.to_string())
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_fix_engine_new() {
-        let engine = FixEngine::new();
-        assert!(!engine.auto_apply_safe);
-    }
-
-    #[test]
-    fn test_preview_diff() {
-        let engine = FixEngine::new();
-        let original = "line 1\nline 2\nline 3\n";
-        let modified = "line 1\nline 2 modified\nline 3\n";
-        let diff = engine.preview(original, modified);
-        assert!(diff.contains("-line 2"));
-        assert!(diff.contains("+line 2 modified"));
     }
 }

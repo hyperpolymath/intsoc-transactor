@@ -1,6 +1,15 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-//! RFC XML v3 (RFC 7991) parser using quick-xml.
+//! RFC XML v3 (RFC 7991) parser implementation.
+//!
+//! This module uses an event-driven SAX-style parser (`quick-xml`) to efficiently
+//! extract metadata and structure from Internet-Draft and RFC source files.
+//!
+//! PARSING STRATEGY:
+//! 1. Iterate through XML events (Start, End, Text, Empty).
+//! 2. Track logical depth and section context (Front, Middle, Back matter).
+//! 3. Extract attributes from `<rfc>`, `<author>`, and `<date>` tags.
+//! 4. Heuristically determine the submission stream from the `docName`.
 
 use intsoc_core::document::{
     Author, Category, Document, DocumentFormat, IprDeclaration,
@@ -11,7 +20,9 @@ use crate::ParseError;
 use quick_xml::events::{BytesStart, Event};
 use quick_xml::Reader;
 
-/// Parse an RFC XML v3 document.
+/// Entry point for parsing an RFC XML v3 document.
+///
+/// Returns a `Document` domain object populated with extracted metadata.
 #[allow(unused_assignments, unused_variables)]
 pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
     let mut reader = Reader::from_str(source);
@@ -21,6 +32,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
     doc.format = DocumentFormat::XmlV3;
     doc.source = source.to_string();
 
+    // Context tracking flags
     let mut in_front = false;
     let mut in_middle = false;
     let mut in_back = false;
@@ -62,9 +74,6 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
                         in_references = true;
                         current_ref_type = ReferenceType::None;
                     }
-                    b"name" if in_references => {
-                        // Will capture text in Text event
-                    }
                     b"section" if in_middle => {
                         current_section_name = get_attr_str(e, b"title").unwrap_or_default();
                     }
@@ -92,6 +101,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
                     doc.title = text;
                     in_title = false;
                 } else if in_abstract && depth > abstract_depth {
+                    // Collect multi-line abstract text
                     if let Some(ref mut abs) = doc.abstract_text {
                         abs.push(' ');
                         abs.push_str(&text);
@@ -99,7 +109,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
                         doc.abstract_text = Some(text);
                     }
                 } else if in_references && current_section_name.is_empty() {
-                    // Capture references section name for classifying normative vs informative
+                    // Logic to classify references as Normative or Informative
                     let lower = text.to_lowercase();
                     if lower.contains("normative") {
                         current_ref_type = ReferenceType::Normative;
@@ -108,6 +118,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
                     }
                 }
             }
+            // ... [handling for Empty events and attributes]
             Ok(Event::Empty(ref e)) => {
                 match e.name().as_ref() {
                     b"author" if in_front && !in_references => {
@@ -118,7 +129,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
                         parse_date_attrs(e, &mut doc)?;
                     }
                     b"seriesInfo" if in_front => {
-                        // Check for draft name
+                        // Detect "Internet-Draft" value to extract the draft name
                         if let (Some(name), Some(value)) =
                             (get_attr_str(e, b"name"), get_attr_str(e, b"value"))
                         {
@@ -136,7 +147,8 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
         buf.clear();
     }
 
-    // Detect stream from document name
+    // HEURISTIC: Stream Detection
+    // Determines the administrative stream based on standard naming conventions.
     if doc.name.starts_with("draft-ietf-") {
         let parts: Vec<&str> = doc.name.strip_prefix("draft-ietf-").unwrap().splitn(2, '-').collect();
         if !parts.is_empty() {
@@ -152,9 +164,8 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
             };
         }
     }
-    // Otherwise remains IetfIndividual
 
-    // Detect boilerplate presence
+    // Identify if required Trust boilerplate was declared in <rfc ipr="...">
     doc.has_boilerplate = doc.ipr.is_some();
 
     Ok(doc)
@@ -167,6 +178,7 @@ enum ReferenceType {
     Informative,
 }
 
+// ... [Helper functions for attribute parsing: parse_rfc_attrs, parse_author_attrs, etc.]
 fn parse_rfc_attrs(e: &BytesStart, doc: &mut Document) -> Result<(), ParseError> {
     if let Some(ipr) = get_attr_str(e, b"ipr") {
         doc.ipr = match ipr.as_str() {

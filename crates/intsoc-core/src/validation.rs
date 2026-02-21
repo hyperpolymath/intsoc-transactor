@@ -1,101 +1,106 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-//! Validation framework for document checking.
+//! Validation framework for Internet Society document checking.
+//!
+//! This module provides the data structures for reporting validation findings
+//! (errors, warnings, fixes) and categorizing them according to the type of 
+//! check (Boilerplate, XML, IANA, etc.).
 
 use serde::{Deserialize, Serialize};
 
-/// Severity of a check result.
+/// Severity levels for validation findings.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum Severity {
-    /// Informational note, not a problem
+    /// Non-critical note or reminder.
     Info,
-    /// Warning that should be addressed
+    /// Potential issue that should be addressed but does not block submission.
     Warning,
-    /// Error that must be fixed before submission
+    /// Compliance failure that MUST be fixed before submission.
     Error,
-    /// Fatal error that prevents further processing
+    /// Critical failure that prevents further validation or processing.
     Fatal,
 }
 
-/// A single check result from document validation.
+/// A granular validation result for a specific check.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CheckResult {
-    /// Unique check identifier (e.g., "boilerplate-missing")
+    /// Unique identifier for the check (e.g., "iana-section-missing").
     pub check_id: String,
 
-    /// Severity of the finding
+    /// Severity of this specific finding.
     pub severity: Severity,
 
-    /// Human-readable description
+    /// Human-readable explanation of the finding.
     pub message: String,
 
-    /// Location in the document (line number, XML path, etc.)
+    /// Logical or physical location within the source document.
     pub location: Option<Location>,
 
-    /// The category of check that produced this result
+    /// Categorization for grouping results in the UI.
     pub category: CheckCategory,
 
-    /// Whether an automatic fix is available
+    /// Indicates if the transactor engine can automatically resolve this issue.
     pub fixable: Fixability,
 
-    /// Suggested fix description (if any)
+    /// Optional instructions or text for a manual fix.
     pub suggestion: Option<String>,
 }
 
-/// Location within a document.
+/// Identifies a specific point within a document.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Location {
-    /// Line number in the source
+    /// Physical line number (1-based).
     Line(u32),
-    /// Line and column
+    /// Physical line and column.
     LineColumn { line: u32, column: u32 },
-    /// XML path (e.g., "/rfc/front/title")
+    /// Logical path in an XML document.
     XmlPath(String),
-    /// Section number (e.g., "3.2.1")
+    /// logical section heading (e.g., "Security Considerations").
     Section(String),
 }
 
-/// Categories of checks.
+/// Categories used to organize validation checks.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum CheckCategory {
-    /// Boilerplate text validation
+    /// Mandatory legal and administrative text.
     Boilerplate,
-    /// Date and expiry checks
+    /// Expiration dates and timestamp validity.
     Date,
-    /// Header/metadata validation
+    /// Front-matter metadata (Authors, Title, Stream).
     Header,
-    /// Reference checks (normative/informative)
+    /// Cross-document reference validity and classification.
     References,
-    /// Required section validation
+    /// Presence of required logical sections.
     Sections,
-    /// Text formatting issues
+    /// Line length, indentation, and encoding.
     TextFormat,
-    /// XML structure/syntax
+    /// Formal XML schema validation (RFC 7991).
     Xml,
-    /// IANA considerations
+    /// Registry impact and parameter assignment text.
     IanaSections,
-    /// Draft naming conventions
+    /// Adherence to the draft- naming policy.
     DraftName,
-    /// IPR declaration
+    /// Intellectual Property Rights declaration compliance.
     Ipr,
 }
 
-/// Whether and how a check result can be fixed automatically.
+/// Degree of automation possible for a specific fix.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Fixability {
-    /// Can be fixed automatically with no risk
+    /// High-confidence automatic resolution (e.g., updating a date).
     AutoSafe,
-    /// Can be fixed automatically but should be reviewed
+    /// Automatic fix available but requires human review.
     Recommended,
-    /// Requires manual intervention
+    /// Issue is too complex for automation; requires manual edit.
     ManualOnly,
-    /// Not fixable (informational only)
+    /// Finding is purely informational; no fix required.
     NotFixable,
 }
 
-/// Summary of all check results for a document.
+/// Aggregated report of all validation checks for a document.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CheckSummary {
+    /// Individual check findings.
     pub results: Vec<CheckResult>,
     pub error_count: usize,
     pub warning_count: usize,
@@ -106,7 +111,7 @@ pub struct CheckSummary {
 }
 
 impl CheckSummary {
-    /// Create a summary from a list of check results.
+    /// Constructs a summary report from a list of raw results.
     #[must_use]
     pub fn from_results(results: Vec<CheckResult>) -> Self {
         let error_count = results.iter().filter(|r| r.severity >= Severity::Error).count();
@@ -142,7 +147,7 @@ impl CheckSummary {
         }
     }
 
-    /// Whether the document passes all checks (no errors or fatals).
+    /// High-level pass/fail gate. Returns true if no Errors or Fatals exist.
     #[must_use]
     pub fn passes(&self) -> bool {
         self.error_count == 0
