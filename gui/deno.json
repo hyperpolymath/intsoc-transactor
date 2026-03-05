@@ -2,7 +2,7 @@
   "tasks": {
     "dev": "deno task rescript && tauri dev",
     "build": "deno task rescript && tauri build",
-    "rescript": "npx rescript build",
+    "rescript": "^12.0.0",
     "rescript:watch": "npx rescript build -w",
     "rescript:clean": "npx rescript clean"
   },
