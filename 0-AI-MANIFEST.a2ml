@@ -56,7 +56,7 @@ Policy enforcement contracts: k9, dust, lust, must, trust
 1. **No state file duplication** - Root must NOT contain STATE.a2ml, META.a2ml, etc.
 2. **Single source of truth** - `.machine_readable/` is authoritative
 3. **License consistency** - All code PMPL-1.0-or-later
-4. **Author attribution** - Always "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"
+4. **Author attribution** - Always "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
 5. **No banned languages** - No TypeScript, no Node.js, no Python, no Go
 6. **Container standard** - Containerfile (never Dockerfile), Podman (never Docker)
 7. **ABI/FFI standard** - Idris2 ABI + Zig FFI for foreign interfaces

@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: PMPL-1.0-or-later
--- Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
+-- Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 cabal-version: 3.0
 name:          intsoc-parser-hs
@@ -13,7 +13,7 @@ license:       MPL-2.0
 -- PMPL-1.0-or-later preferred; MPL-2.0 required for Hackage/Cabal ecosystem
 license-file:  ../LICENSE
 author:        Jonathan D.A. Jewell
-maintainer:    jonathan.jewell@open.ac.uk
+maintainer:    j.d.a.jewell@open.ac.uk
 copyright:     (c) 2026 Jonathan D.A. Jewell (hyperpolymath)
 category:      Text
 build-type:    Simple
