@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "9bcd259d-1827-5327-80f7-9bac11d45449"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "intsoc-transactor"
+prefixed-name = "pt-intsoc-transactor"
+
+[clade]
+primary = "pt"
+secondary = ["gv"]
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/intsoc-transactor"
+gitlab = "hyperpolymath/intsoc-transactor"
+bitbucket = "hyperpolymath/intsoc-transactor"
+
+[lineage]
+type = "standalone"
+parent = "Internet Society Transactor — IETF/IRTF/IANA draft management"
+born = "2026-03-16"
