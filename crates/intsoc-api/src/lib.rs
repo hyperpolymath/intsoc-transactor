@@ -9,6 +9,7 @@
 //! 1. IETF Datatracker: For document discovery, state tracking, and submission.
 //! 2. IANA Registries: For protocol parameter verification and lookup.
 
+#![forbid(unsafe_code)]
 pub mod datatracker;
 pub mod iana;
 

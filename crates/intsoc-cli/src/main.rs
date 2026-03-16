@@ -9,6 +9,7 @@
 //!   intsoc status <name>      Check submission status
 //!   intsoc init <name>        Initialize a new draft from template
 
+#![forbid(unsafe_code)]
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 

@@ -5,6 +5,7 @@
 //! Parses RFC XML v3, plain-text Internet-Drafts, and idnits output
 //! into the unified `Document` model.
 
+#![forbid(unsafe_code)]
 pub mod idnits;
 pub mod plain_text;
 pub mod xml;

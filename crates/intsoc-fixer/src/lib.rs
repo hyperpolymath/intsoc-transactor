@@ -6,6 +6,7 @@
 //! Internet Society documents. Uses the AutoSafe/Recommended/ManualOnly
 //! classification from the validation framework.
 
+#![forbid(unsafe_code)]
 pub mod diff;
 pub mod engine;
 pub mod generators;

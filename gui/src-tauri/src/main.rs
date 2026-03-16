@@ -14,6 +14,7 @@
 //! 3. **Conversion**: Provides loss-less mapping between internal 
 //!    Rust enums and frontend-friendly string identifiers.
 
+#![forbid(unsafe_code)]
 use serde::{Deserialize, Serialize};
 use intsoc_core::validation::{CheckCategory, CheckResult, CheckSummary, Fixability, Severity};
 // ... [other imports]

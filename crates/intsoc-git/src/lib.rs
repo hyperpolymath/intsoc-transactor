@@ -12,6 +12,7 @@
 //! 2. Build Simplicity: No external C library dependencies (libssh2, openssl, etc.).
 //! 3. Static Binary Support: Enables easy cross-compilation for verified environments.
 
+#![forbid(unsafe_code)]
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 

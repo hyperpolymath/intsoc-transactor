@@ -6,6 +6,7 @@
 //! for processing documents across all Internet Society organizations:
 //! IETF, IRTF, IAB, Independent Stream, IANA, and RFC Editor.
 
+#![forbid(unsafe_code)]
 pub mod document;
 pub mod fix;
 pub mod organization;

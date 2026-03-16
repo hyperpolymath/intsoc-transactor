@@ -7,6 +7,7 @@
 //! - `templates/` - Per-stream document templates
 //! - `policies/`  - Submission constraints per organization
 
+#![forbid(unsafe_code)]
 pub mod policy;
 pub mod render;
 
