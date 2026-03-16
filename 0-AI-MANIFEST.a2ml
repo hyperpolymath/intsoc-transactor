@@ -104,21 +104,21 @@ intsoc-transactor/
 ✅ Read THIS file (0-AI-MANIFEST.a2ml) first
 ✅ Understand canonical location: `.machine_readable/` (state, bots, contractiles)
 ✅ Know the invariants (no state file duplication, etc.)
-✅ Read `.machine_readable/STATE.a2ml` for current status
-✅ Read `.machine_readable/AGENTIC.a2ml` for interaction patterns
+✅ Read `.machine_readable/6a2/STATE.a2ml` for current status
+✅ Read `.machine_readable/6a2/AGENTIC.a2ml` for interaction patterns
 
 ## LIFECYCLE HOOKS
 
 ### on-enter (Session Start)
 
 1. Read and acknowledge this manifest
-2. Read `.machine_readable/STATE.a2ml`
+2. Read `.machine_readable/6a2/STATE.a2ml`
 3. Check for blockers
 4. State understanding of canonical locations
 
 ### on-exit (Session End)
 
-1. Update `.machine_readable/STATE.a2ml` if changes made
+1. Update `.machine_readable/6a2/STATE.a2ml` if changes made
 2. Document new blockers
 3. Summarize outcomes
 
