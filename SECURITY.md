@@ -9,7 +9,7 @@ Replace all {{PLACEHOLDER}} values with your information:
   hyperpolymath            - GitHub username or org (e.g., hyperpolymath)
   intsoc-transactor             - Repository name
   j.d.a.jewell@open.ac.uk   - Security contact email
-  {{PGP_FINGERPRINT}}  - Your PGP key fingerprint (40 chars, no spaces)
+  [PGP fingerprint not set]  - Your PGP key fingerprint (40 chars, no spaces)
   {{PGP_KEY_URL}}      - URL to your public PGP key
   https://github.com/hyperpolymath/intsoc-transactor          - Your website/domain
   2026     - Current year for copyright
@@ -60,7 +60,7 @@ If you cannot use GitHub Security Advisories, you may email us directly:
 |---|---|
 | **Email** | j.d.a.jewell@open.ac.uk |
 | **PGP Key** | [Download Public Key]({{PGP_KEY_URL}}) |
-| **Fingerprint** | `{{PGP_FINGERPRINT}}` |
+| **Fingerprint** | `[PGP fingerprint not set]` |
 
 ```bash
 # Import our PGP key
