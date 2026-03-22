@@ -1,0 +1,153 @@
+{
+  "$schema": "https://gossamer.dev/schemas/config/v1",
+  "productName": "intsoc-transactor",
+  "version": "0.1.0",
+  "identifier": "org.hyperpolymath.intsoc-transactor",
+  "build": {
+    "frontendDist": "../",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": ""
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "intsoc-transactor - Internet Society Document Processing",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "maxWidth": null,
+        "maxHeight": null,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "transparent": false,
+        "center": true,
+        "alwaysOnTop": false,
+        "visible": true,
+        "url": "/"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline'",
+      "capabilities": [
+        "filesystem",
+        "network",
+        "shell",
+        "clipboard"
+      ],
+      "capabilityTokens": {
+        "enabled": false,
+        "issuer": "gossamer-runtime",
+        "ttl": 3600
+      },
+      "sandbox": {
+        "enabled": true,
+        "allowExec": true,
+        "allowNetwork": true,
+        "allowFilesystem": true
+      }
+    },
+    "ipc": {
+      "protocol": "json",
+      "bridgeInjection": true,
+      "maxMessageSize": 16777216,
+      "timeout": 30000
+    },
+    "tray": {
+      "enabled": false,
+      "icon": null,
+      "tooltip": null,
+      "menuOnLeftClick": true
+    }
+  },
+  "plugins": {
+    "shell": {
+      "scope": [
+        {
+          "name": "idnits",
+          "cmd": "idnits",
+          "args": true
+        },
+        {
+          "name": "xml2rfc",
+          "cmd": "xml2rfc",
+          "args": true
+        }
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "deb",
+      "appimage",
+      "dmg",
+      "nsis"
+    ],
+    "icon": [],
+    "resources": [],
+    "copyright": "Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath)",
+    "license": "PMPL-1.0-or-later",
+    "shortDescription": "IETF document processing tool",
+    "longDescription": "Internet Society document processing tool for validating and fixing Internet-Drafts using idnits and xml2rfc.",
+    "linux": {
+      "desktopEntry": true,
+      "category": "Office",
+      "section": "text",
+      "depends": [],
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    },
+    "macos": {
+      "bundleIdentifier": "org.hyperpolymath.intsoc-transactor",
+      "minimumSystemVersion": "11.0",
+      "frameworks": [],
+      "entitlements": null,
+      "signingIdentity": null,
+      "notarization": {
+        "enabled": false,
+        "teamId": null
+      }
+    },
+    "windows": {
+      "webview2": "embed",
+      "certificateThumbprint": null,
+      "wix": {
+        "language": "en-US"
+      },
+      "nsis": {
+        "displayLanguageSelector": false,
+        "installerIcon": null
+      }
+    },
+    "mobile": {
+      "ios": {
+        "minimumVersion": "14.0",
+        "deviceFamily": [
+          "iphone",
+          "ipad"
+        ],
+        "capabilities": [],
+        "frameworks": [],
+        "entitlements": {}
+      },
+      "android": {
+        "minimumSdk": 24,
+        "targetSdk": 34,
+        "permissions": [],
+        "features": []
+      }
+    }
+  },
+  "ephapax": {
+    "modules": [],
+    "region": "app",
+    "linearVerification": true,
+    "regionBoundary": "strict",
+    "preload": []
+  }
+}
