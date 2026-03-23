@@ -42,9 +42,7 @@ fn generate_date_fix(document: &Document, result: &CheckResult) -> Option<Fix> {
             change: FixChange::XmlReplace {
                 path: "/rfc/front/date".to_string(),
                 old_value: String::new(),
-                new_value: format!(
-                    r#"<date year="{year}" month="{month}" day="{day}"/>"#
-                ),
+                new_value: format!(r#"<date year="{year}" month="{month}" day="{day}"/>"#),
             },
         }),
         DocumentFormat::PlainText => {

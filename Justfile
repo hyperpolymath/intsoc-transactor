@@ -316,7 +316,7 @@ check file:
     cargo run -p intsoc-cli -- check {{file}}
 
 # Fix a document
-fix file *args:
+fix-doc file *args:
     cargo run -p intsoc-cli -- fix {{file}} {{args}}
 
 # Install to user path

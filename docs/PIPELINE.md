@@ -26,7 +26,7 @@ streams (IETF, IRTF, IAB, Independent Stream, IANA, RFC Editor).
 - Validates documents against per-stream requirements (idnits, metadata, SPDX)
 - Classifies fixes as AutoSafe, Recommended, or ManualOnly
 - Tracks document lifecycle with per-stream state machines (20+ states for IETF)
-- Provides CLI (`intsoc check/fix/submit/status/init`) and Tauri desktop GUI
+- Provides CLI (`intsoc check/fix/submit/status/init`) and Gossamer desktop GUI
 
 **Key crates:**
 - `intsoc-core` — domain model, state machines, validation framework

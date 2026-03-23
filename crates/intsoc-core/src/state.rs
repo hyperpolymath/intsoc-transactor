@@ -2,11 +2,11 @@
 
 //! State machines for document lifecycle tracking.
 //!
-//! This module defines the core state machine architecture used to track 
-//! Internet Society (IETF, IANA, etc.) documents through their various 
+//! This module defines the core state machine architecture used to track
+//! Internet Society (IETF, IANA, etc.) documents through their various
 //! administrative and technical review stages.
 //!
-//! INVARIANT: Only transitions explicitly defined in the `StreamState` 
+//! INVARIANT: Only transitions explicitly defined in the `StreamState`
 //! implementation are allowed.
 
 use chrono::{DateTime, Utc};
@@ -242,9 +242,5 @@ impl<S: StreamState> Default for StateMachine<S> {
 #[derive(Debug, thiserror::Error)]
 pub enum StateMachineError<S: StreamState> {
     #[error("invalid transition from {from} to {to} (valid: {valid:?})")]
-    InvalidTransition {
-        from: S,
-        to: S,
-        valid: Vec<S>,
-    },
+    InvalidTransition { from: S, to: S, valid: Vec<S> },
 }

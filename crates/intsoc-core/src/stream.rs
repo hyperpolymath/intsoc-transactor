@@ -23,31 +23,19 @@ pub enum Stream {
         wg: String,
     },
     /// Standards Track (Proposed Standard, Internet Standard)
-    IetfStandardsTrack {
-        wg: Option<String>,
-    },
+    IetfStandardsTrack { wg: Option<String> },
     /// Informational document (RFC 2026 Section 4.2.2)
-    IetfInformational {
-        wg: Option<String>,
-    },
+    IetfInformational { wg: Option<String> },
     /// Experimental document (RFC 2026 Section 4.2.1)
-    IetfExperimental {
-        wg: Option<String>,
-    },
+    IetfExperimental { wg: Option<String> },
     /// Best Current Practice (RFC 2026 Section 5)
-    IetfBcp {
-        wg: Option<String>,
-    },
+    IetfBcp { wg: Option<String> },
     /// BIS (replacement for existing RFC)
-    IetfBis {
-        obsoletes: Vec<u32>,
-    },
+    IetfBis { obsoletes: Vec<u32> },
 
     // -- IRTF STREAMS (RFC 5743) --
     /// Official Research Group document
-    IrtfResearchGroup {
-        rg: String,
-    },
+    IrtfResearchGroup { rg: String },
     /// Individual submission to the IRTF stream
     IrtfIndividual,
 
@@ -63,19 +51,13 @@ pub enum Stream {
 
     // -- IANA (Non-RFC stream) --
     /// Request for a new IANA registry
-    IanaRegistryRequest {
-        registry: String,
-    },
+    IanaRegistryRequest { registry: String },
     /// Protocol parameter assignment in an existing registry
-    IanaParameterAssignment {
-        registry: String,
-    },
+    IanaParameterAssignment { registry: String },
 
     // -- RFC EDITOR STREAMS (RFC 8729) --
     /// Official errata for an existing RFC
-    RfcEditorErrata {
-        rfc: u32,
-    },
+    RfcEditorErrata { rfc: u32 },
     /// Document originating from the RFC Editor's editorial stream
     RfcEditorEditorial,
 }

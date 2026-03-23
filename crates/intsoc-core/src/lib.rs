@@ -12,5 +12,6 @@ pub mod fix;
 pub mod organization;
 pub mod state;
 pub mod stream;
+pub mod submission;
 pub mod transaction;
 pub mod validation;

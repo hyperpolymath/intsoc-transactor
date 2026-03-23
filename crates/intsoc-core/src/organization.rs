@@ -52,6 +52,9 @@ impl Organization {
     /// Whether this organization uses the IETF Datatracker for submissions.
     #[must_use]
     pub fn uses_datatracker(&self) -> bool {
-        matches!(self, Self::Ietf | Self::Irtf | Self::Iab | Self::Independent)
+        matches!(
+            self,
+            Self::Ietf | Self::Irtf | Self::Iab | Self::Independent
+        )
     }
 }

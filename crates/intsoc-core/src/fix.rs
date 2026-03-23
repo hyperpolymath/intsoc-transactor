@@ -38,15 +38,9 @@ pub enum FixChange {
         new_text: String,
     },
     /// Insert text at a position
-    Insert {
-        line: u32,
-        text: String,
-    },
+    Insert { line: u32, text: String },
     /// Delete a range
-    Delete {
-        start_line: u32,
-        end_line: u32,
-    },
+    Delete { start_line: u32, end_line: u32 },
     /// Replace XML element content
     XmlReplace {
         path: String,

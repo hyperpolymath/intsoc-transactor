@@ -33,6 +33,9 @@ pub enum ParseError {
 }
 
 /// Parse a document from its source, auto-detecting format.
+///
+/// Alias: [`parse_document`] provides the same functionality under
+/// the name used by the Gossamer GUI backend.
 pub fn parse(source: &str) -> Result<Document, ParseError> {
     let trimmed = source.trim_start();
     if trimmed.starts_with("<?xml") || trimmed.starts_with("<rfc") {
@@ -40,4 +43,11 @@ pub fn parse(source: &str) -> Result<Document, ParseError> {
     } else {
         plain_text::parse_plain_text(source)
     }
+}
+
+/// Parse a document from its source, auto-detecting format.
+///
+/// This is an alias for [`parse`], provided for clarity in the GUI backend.
+pub fn parse_document(source: &str) -> Result<Document, ParseError> {
+    parse(source)
 }

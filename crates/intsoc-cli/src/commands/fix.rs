@@ -2,8 +2,8 @@
 
 //! The `fix` command: generate and apply fixes.
 
-use intsoc_fixer::engine::FixEngine;
 use intsoc_fixer::diff;
+use intsoc_fixer::engine::FixEngine;
 use std::path::Path;
 
 /// Run the fix command.
@@ -30,7 +30,9 @@ pub async fn run(
     let rec_count = plan.recommended_fixes().len();
     let manual_count = plan.manual_only_fixes().len();
 
-    println!("Fix plan: {auto_count} auto-safe, {rec_count} recommended, {manual_count} manual-only");
+    println!(
+        "Fix plan: {auto_count} auto-safe, {rec_count} recommended, {manual_count} manual-only"
+    );
 
     // Apply fixes
     let fixed_source = if auto_only {

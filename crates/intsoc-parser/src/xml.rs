@@ -11,14 +11,12 @@
 //! 3. Extract attributes from `<rfc>`, `<author>`, and `<date>` tags.
 //! 4. Heuristically determine the submission stream from the `docName`.
 
-use intsoc_core::document::{
-    Author, Category, Document, DocumentFormat, IprDeclaration,
-};
+use intsoc_core::document::{Author, Category, Document, DocumentFormat, IprDeclaration};
 use intsoc_core::stream::Stream;
 
 use crate::ParseError;
-use quick_xml::events::{BytesStart, Event};
 use quick_xml::Reader;
+use quick_xml::events::{BytesStart, Event};
 
 /// Entry point for parsing an RFC XML v3 document.
 ///
@@ -150,14 +148,24 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
     // HEURISTIC: Stream Detection
     // Determines the administrative stream based on standard naming conventions.
     if doc.name.starts_with("draft-ietf-") {
-        let parts: Vec<&str> = doc.name.strip_prefix("draft-ietf-").unwrap().splitn(2, '-').collect();
+        let parts: Vec<&str> = doc
+            .name
+            .strip_prefix("draft-ietf-")
+            .unwrap()
+            .splitn(2, '-')
+            .collect();
         if !parts.is_empty() {
             doc.stream = Stream::IetfWorkingGroup {
                 wg: parts[0].to_string(),
             };
         }
     } else if doc.name.starts_with("draft-irtf-") {
-        let parts: Vec<&str> = doc.name.strip_prefix("draft-irtf-").unwrap().splitn(2, '-').collect();
+        let parts: Vec<&str> = doc
+            .name
+            .strip_prefix("draft-irtf-")
+            .unwrap()
+            .splitn(2, '-')
+            .collect();
         if !parts.is_empty() {
             doc.stream = Stream::IrtfResearchGroup {
                 rg: parts[0].to_string(),
@@ -229,10 +237,8 @@ fn parse_author_attrs(e: &BytesStart) -> Result<Author, ParseError> {
 }
 
 fn parse_date_attrs(e: &BytesStart, doc: &mut Document) -> Result<(), ParseError> {
-    let year = get_attr_str(e, b"year")
-        .and_then(|y| y.parse::<i32>().ok());
-    let month = get_attr_str(e, b"month")
-        .and_then(|m| parse_month(&m));
+    let year = get_attr_str(e, b"year").and_then(|y| y.parse::<i32>().ok());
+    let month = get_attr_str(e, b"month").and_then(|m| parse_month(&m));
     let day = get_attr_str(e, b"day")
         .and_then(|d| d.parse::<u32>().ok())
         .unwrap_or(1);

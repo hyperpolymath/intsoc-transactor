@@ -35,7 +35,8 @@ pub async fn run(file: &Path, skip_checks: bool) -> Result<(), Box<dyn std::erro
         return Err(format!(
             "{org} submissions are not yet supported via API. Please submit manually at {}",
             org.datatracker_base()
-        ).into());
+        )
+        .into());
     }
 
     println!("Submission target: IETF Datatracker");

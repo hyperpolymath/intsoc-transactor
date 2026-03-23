@@ -2,15 +2,15 @@
 
 //! Nickel Template Renderer — High-Assurance Logic Evaluation.
 //!
-//! This module orchestrates the evaluation of Nickel-based configuration 
-//! and policy files. It utilizes the external `nickel` CLI to maintain 
+//! This module orchestrates the evaluation of Nickel-based configuration
+//! and policy files. It utilizes the external `nickel` CLI to maintain
 //! a clear security boundary between the transactor and the evaluator.
 //!
 //! DESIGN PILLARS:
 //! 1. **Isolation**: Process-level isolation for template evaluation.
-//! 2. **Verification**: Direct invocation of `nickel typecheck` to 
+//! 2. **Verification**: Direct invocation of `nickel typecheck` to
 //!    ensure manifest contract compliance.
-//! 3. **Interoperability**: Exports evaluated Nickel records to JSON 
+//! 3. **Interoperability**: Exports evaluated Nickel records to JSON
 //!    for consumption by Rust domain models.
 
 use crate::NickelError;
