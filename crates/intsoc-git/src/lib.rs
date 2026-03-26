@@ -2,10 +2,10 @@
 
 //! Git integration for Internet Society document versioning.
 //!
-//! This module provides a high-assurance interface for managing the 
-//! submission history of documents. 
+//! This module provides a high-assurance interface for managing the
+//! submission history of documents.
 //!
-//! ARCHITECTURAL CHOICE: Uses `gix` (the pure-Rust implementation of Git) 
+//! ARCHITECTURAL CHOICE: Uses `gix` (the pure-Rust implementation of Git)
 //! instead of `git2-rs` (libgit2 bindings).
 //! BENEFITS:
 //! 1. Memory Safety: Avoids C-based pointer arithmetic and buffer management.

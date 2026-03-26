@@ -10,7 +10,7 @@ members = [
     "crates/intsoc-git",
     "crates/intsoc-api",
     "crates/intsoc-cli",
-    # "gui/src-tauri",  # Enable when Tauri deps available
+    "gui",  # Gossamer desktop GUI (converted from Tauri)
 ]
 
 [workspace.package]

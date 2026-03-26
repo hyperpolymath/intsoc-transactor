@@ -33,7 +33,7 @@ let batch = (cmds: list<t<'msg>>): t<'msg> => {
 }
 
 /// Create a command from a callback function.
-/// This is the main way to integrate async operations (Promises, Tauri invoke, etc.)
+/// This is the main way to integrate async operations (Promises, Gossamer invoke, etc.)
 let call = (f: callbacks<'msg> => unit): t<'msg> => Call(f)
 
 /// Map a command's message type

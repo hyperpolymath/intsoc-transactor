@@ -2,7 +2,7 @@
 
 //! IETF Datatracker REST API Client.
 //!
-//! Implements high-level operations against the authoritative IETF document 
+//! Implements high-level operations against the authoritative IETF document
 //! management system. Supports both authenticated and public read-only access.
 //!
 //! API REF: https://datatracker.ietf.org/api/

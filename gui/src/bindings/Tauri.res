@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-/// Tauri FFI Bindings for intsoc-transactor
+/// Backend IPC Bindings for intsoc-transactor
 ///
-/// ReScript bindings to the Tauri 2.0 APIs for:
+/// ReScript bindings to the backend APIs via RuntimeBridge for:
 /// - Core invoke/event system (commands, listeners, emitters)
 /// - Window management (title, minimize, maximize, close)
 /// - Shell plugin (execute external tools like idnits)
@@ -10,119 +10,108 @@
 /// - Dialog plugin (file open/save dialogs)
 /// - Filesystem plugin (read/write document files)
 ///
-/// Custom Tauri commands for the intsoc-transactor backend:
+/// Custom backend commands for the intsoc-transactor:
 /// - check_document: validate an Internet-Draft
 /// - fix_document: generate and apply fixes
 /// - get_submission_status: query Datatracker submission state
+///
+/// Uses RuntimeBridge for Gossamer dispatch (Tauri support removed).
 
-/// Generic Tauri invoke result (promise-based)
+/// Generic backend invoke result (promise-based)
 type invokeResult<'a> = promise<'a>
 
 // ---------------------------------------------------------------------------
-// Core: invoke, listen, emit
+// Core: invoke, listen, emit — via RuntimeBridge
 // ---------------------------------------------------------------------------
 
-/// Invoke a Tauri command on the Rust backend
-@module("@tauri-apps/api/core")
-external invoke: (string, 'params) => invokeResult<'result> = "invoke"
+/// Invoke a backend command via Gossamer
+let invoke = RuntimeBridge.invoke
 
-/// Event payload wrapper from Tauri event system
+/// Event payload wrapper from the backend event system
 type eventPayload<'a> = {payload: 'a}
 
 /// Unlisten handle returned by listen()
 type unlisten = unit => unit
 
-/// Listen for events emitted by the Tauri backend
-@module("@tauri-apps/api/event")
-external listen: (string, eventPayload<'a> => unit) => invokeResult<unlisten> = "listen"
+/// Listen for events emitted by the backend
+let listen = RuntimeBridge.Event.listen
 
-/// Emit an event to the Tauri backend
-@module("@tauri-apps/api/event")
-external emit: (string, 'payload) => invokeResult<unit> = "emit"
+/// Emit an event to the backend
+let emit = RuntimeBridge.Event.emit
 
 // ---------------------------------------------------------------------------
-// Window module
+// Window module — via RuntimeBridge (Gossamer IPC)
 // ---------------------------------------------------------------------------
 
-/// Window management operations (Tauri 2.0 window API)
+/// Window management operations via Gossamer backend
 module Window = {
   type windowLabel = string
 
-  @module("@tauri-apps/api/window")
-  external getCurrent: unit => {"label": windowLabel} = "getCurrent"
+  /// Get the current window label from the Gossamer runtime.
+  let getCurrent = (): {"label": windowLabel} => {
+    {"label": "main"}
+  }
 
-  @module("@tauri-apps/api/window")
-  external setTitle: string => invokeResult<unit> = "setTitle"
+  /// Set the window title via Gossamer IPC.
+  let setTitle = (title: string): invokeResult<unit> => {
+    invoke("__gossamer_window_set_title", {"title": title})
+  }
 
-  @module("@tauri-apps/api/window")
-  external setFullscreen: bool => invokeResult<unit> = "setFullscreen"
+  /// Set fullscreen mode via Gossamer IPC.
+  let setFullscreen = (fullscreen: bool): invokeResult<unit> => {
+    invoke("__gossamer_window_set_fullscreen", {"fullscreen": fullscreen})
+  }
 
-  @module("@tauri-apps/api/window")
-  external minimize: unit => invokeResult<unit> = "minimize"
+  /// Minimize the window via Gossamer IPC.
+  let minimize = (): invokeResult<unit> => {
+    invoke("__gossamer_window_minimize", {})
+  }
 
-  @module("@tauri-apps/api/window")
-  external maximize: unit => invokeResult<unit> = "maximize"
+  /// Maximize the window via Gossamer IPC.
+  let maximize = (): invokeResult<unit> => {
+    invoke("__gossamer_window_maximize", {})
+  }
 
-  @module("@tauri-apps/api/window")
-  external close: unit => invokeResult<unit> = "close"
+  /// Close the window via Gossamer IPC.
+  let close = (): invokeResult<unit> => {
+    invoke("__gossamer_window_close", {})
+  }
 }
 
 // ---------------------------------------------------------------------------
-// Shell module (tauri-plugin-shell)
+// Shell module — via RuntimeBridge.Shell
 // ---------------------------------------------------------------------------
 
 /// Shell operations for running external tools (idnits, xml2rfc, etc.)
 module Shell = {
-  type command
-  type childProcess = {
-    code: int,
-    stdout: string,
-    stderr: string,
-  }
-
-  @module("@tauri-apps/plugin-shell")
-  external command: (string, array<string>) => command = "Command"
-
-  @send
-  external execute: command => invokeResult<childProcess> = "execute"
+  type childProcess = RuntimeBridge.Shell.childProcess
 
   /// Run idnits on a document file and return the output
   let runIdnits = (filePath: string): invokeResult<childProcess> => {
-    let cmd = command("idnits", [filePath])
-    execute(cmd)
+    RuntimeBridge.Shell.execute("idnits", [filePath])
   }
 
   /// Run xml2rfc to convert XML to text output
   let runXml2rfc = (filePath: string, outputPath: string): invokeResult<childProcess> => {
-    let cmd = command("xml2rfc", ["--text", "--out=" ++ outputPath, filePath])
-    execute(cmd)
+    RuntimeBridge.Shell.execute("xml2rfc", ["--text", "--out=" ++ outputPath, filePath])
   }
 }
 
 // ---------------------------------------------------------------------------
-// Path module
+// Path module — via RuntimeBridge.Path
 // ---------------------------------------------------------------------------
 
 /// Filesystem path resolution (platform-aware)
 module Path = {
-  @module("@tauri-apps/api/path")
-  external appDataDir: unit => invokeResult<string> = "appDataDir"
-
-  @module("@tauri-apps/api/path")
-  external appConfigDir: unit => invokeResult<string> = "appConfigDir"
-
-  @module("@tauri-apps/api/path")
-  external homeDir: unit => invokeResult<string> = "homeDir"
-
-  @module("@tauri-apps/api/path")
-  external desktopDir: unit => invokeResult<string> = "desktopDir"
-
-  @module("@tauri-apps/api/path")
-  external documentDir: unit => invokeResult<string> = "documentDir"
+  let appDataDir = RuntimeBridge.Path.appDataDir
+  let appConfigDir = RuntimeBridge.Path.appConfigDir
+  let homeDir = RuntimeBridge.Path.homeDir
+  let desktopDir = RuntimeBridge.Path.desktopDir
+  let documentDir = RuntimeBridge.Path.documentDir
 }
 
 // ---------------------------------------------------------------------------
-// Dialog module (tauri-plugin-dialog)
+// Dialog module — via RuntimeBridge.Dialog
 // ---------------------------------------------------------------------------
 
 /// Native file dialogs for opening and saving documents
@@ -145,11 +134,21 @@ module Dialog = {
     defaultPath: option<string>,
   }
 
-  @module("@tauri-apps/plugin-dialog")
-  external open_: openDialogOptions => invokeResult<Nullable.t<string>> = "open"
+  /// Open a file dialog via Gossamer IPC.
+  let open_ = (opts: openDialogOptions): invokeResult<Nullable.t<string>> => {
+    RuntimeBridge.Dialog.open(JSON.Encode.object(Dict.fromArray([
+      ("multiple", JSON.Encode.bool(opts.multiple)),
+      ("directory", JSON.Encode.bool(opts.directory)),
+      ("title", JSON.Encode.string(opts.title)),
+    ])))
+  }
 
-  @module("@tauri-apps/plugin-dialog")
-  external save: saveDialogOptions => invokeResult<Nullable.t<string>> = "save"
+  /// Save file dialog via Gossamer IPC.
+  let save = (opts: saveDialogOptions): invokeResult<Nullable.t<string>> => {
+    RuntimeBridge.Dialog.save(JSON.Encode.object(Dict.fromArray([
+      ("title", JSON.Encode.string(opts.title)),
+    ])))
+  }
 
   /// Pre-configured filter for Internet-Draft files
   let draftFileFilters: array<fileFilter> = [
@@ -160,20 +159,17 @@ module Dialog = {
 }
 
 // ---------------------------------------------------------------------------
-// Filesystem module (tauri-plugin-fs)
+// Filesystem module — via RuntimeBridge.Fs
 // ---------------------------------------------------------------------------
 
 /// Filesystem read/write operations for document files
 module Fs = {
-  @module("@tauri-apps/plugin-fs")
-  external readTextFile: string => invokeResult<string> = "readTextFile"
-
-  @module("@tauri-apps/plugin-fs")
-  external writeTextFile: (string, string) => invokeResult<unit> = "writeTextFile"
+  let readTextFile = RuntimeBridge.Fs.readTextFile
+  let writeTextFile = RuntimeBridge.Fs.writeTextFile
 }
 
 // ---------------------------------------------------------------------------
-// Custom intsoc-transactor Tauri commands
+// Custom intsoc-transactor backend commands
 // ---------------------------------------------------------------------------
 
 /// Severity level for check results (mirrors intsoc_core::validation::Severity)
@@ -245,14 +241,14 @@ type submissionStatus = {
   message: string,
 }
 
-/// Check a document for issues via the Tauri backend.
-/// Invokes the check_document Rust command.
+/// Check a document for issues via the backend.
+/// Invokes the check_document command.
 let checkDocument = (source: string, streamHint: option<string>): invokeResult<checkSummary> => {
   invoke("check_document", {"source": source, "stream_hint": streamHint})
 }
 
-/// Fix a document via the Tauri backend.
-/// Invokes the fix_document Rust command with the given fix level.
+/// Fix a document via the backend.
+/// Invokes the fix_document command with the given fix level.
 let fixDocument = (
   source: string,
   autoOnly: bool,

@@ -29,9 +29,7 @@ fn generate_header_fix(document: &Document, result: &CheckResult) -> Option<Fix>
     let msg = result.message.to_lowercase();
 
     if msg.contains("category") || msg.contains("intended status") {
-        let category = document
-            .category
-            .map_or("info", |c| c.xml_value());
+        let category = document.category.map_or("info", |c| c.xml_value());
 
         Some(Fix {
             id: format!("fix-{}", result.check_id),

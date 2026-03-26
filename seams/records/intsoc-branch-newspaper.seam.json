@@ -1,0 +1,110 @@
+{
+  "id": "intsoc-branch-newspaper",
+  "title": "Intsoc-transactor document pipeline ↔ Branch-newspaper publication",
+  "status": "draft",
+  "owners": [
+    {
+      "name": "Jonathan D.A. Jewell",
+      "contact": "j.d.a.jewell@open.ac.uk",
+      "role": "maintainer"
+    }
+  ],
+  "side_a": "intsoc-transactor (document check/fix/submit, Rust)",
+  "side_b": "branch-newspaper (publication platform, Elixir/Phoenix)",
+  "boundary_type": "network",
+  "data_flows": [
+    {
+      "name": "validated_document",
+      "direction": "a_to_b",
+      "description": "Documents validated and fixed by intsoc-transactor are submitted for publication via branch-newspaper."
+    },
+    {
+      "name": "consent_metadata",
+      "direction": "a_to_b",
+      "description": "IPR declarations, author consent status, and publication consent travel with the document."
+    },
+    {
+      "name": "publication_receipt",
+      "direction": "b_to_a",
+      "description": "IPFS CID and publication URL returned after successful publication."
+    }
+  ],
+  "contract_artifacts": [
+    {
+      "path": "seams/records/intsoc-branch-newspaper.seam.json",
+      "kind": "seam-record",
+      "version": "0.1.0"
+    }
+  ],
+  "compat_policy": {
+    "strategy": "semver-ish",
+    "rules": [
+      "Document submission format changes require coordinated release",
+      "consent-aware-http middleware (planned) will mediate this seam"
+    ],
+    "deprecation_window_days": 60
+  },
+  "semantic_invariants": [
+    "Documents must pass all intsoc checks before crossing this seam",
+    "Consent metadata must be present and valid for publication to proceed",
+    "IPFS CIDs returned must be verifiable against document content hash"
+  ],
+  "security_invariants": [
+    "All transport over HTTPS/TLS",
+    "No plaintext credentials in document metadata",
+    "Author identity verified via IPR declaration before publication"
+  ],
+  "privacy_invariants": [
+    "Author contact details not published unless explicitly consented",
+    "Draft documents remain private until publication consent given"
+  ],
+  "test_vectors": [],
+  "checks": {
+    "conformance": {
+      "status": "todo",
+      "notes": "Create test documents that pass through full pipeline"
+    },
+    "no_hidden_channels": {
+      "status": "todo",
+      "notes": "Verify consent-aware-http properly gates all document flows"
+    },
+    "evolution": {
+      "status": "todo",
+      "notes": "HTTP 430 status code adoption tracking"
+    }
+  },
+  "slo": {
+    "latency_ms_p95": 5000,
+    "error_rate_max": 0.01
+  },
+  "failure_behavior": {
+    "timeouts": "Publication timeout at 30s; IPFS pin timeout at 60s",
+    "retries": "Up to 3 retries with exponential backoff for IPFS failures",
+    "backpressure": "Queue documents when IPFS node is overloaded",
+    "idempotency": "Re-submission of same document returns existing CID"
+  },
+  "observability": {
+    "metrics": ["documents_submitted", "publication_duration_ms", "ipfs_pin_failures"],
+    "logs": {
+      "required_fields": ["seam_id", "component", "event", "document_id", "consent_status"]
+    },
+    "tracing": {
+      "propagation": ["traceparent"]
+    }
+  },
+  "change_process": {
+    "required_reviewers": ["@hyperpolymath"],
+    "gates": ["seamctl validate", "intsoc check"]
+  },
+  "rollout_backout": {
+    "rollout_steps": [
+      "Deploy consent-aware-http middleware",
+      "Update intsoc-transactor submit command to use middleware",
+      "Configure branch-newspaper to accept middleware-verified documents"
+    ],
+    "backout_steps": [
+      "Revert to direct submission (bypass middleware)",
+      "Verify existing publications unaffected"
+    ]
+  }
+}

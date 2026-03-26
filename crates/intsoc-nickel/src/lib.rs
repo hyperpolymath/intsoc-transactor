@@ -74,7 +74,11 @@ impl NickelWorkspace {
 
     /// Check if the workspace structure is valid.
     pub fn validate(&self) -> Result<(), NickelError> {
-        for dir in [self.contracts_dir(), self.templates_dir(), self.policies_dir()] {
+        for dir in [
+            self.contracts_dir(),
+            self.templates_dir(),
+            self.policies_dir(),
+        ] {
             if !dir.exists() {
                 return Err(NickelError::TemplateNotFound(dir));
             }

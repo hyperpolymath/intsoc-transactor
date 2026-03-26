@@ -3,7 +3,7 @@
 /// TEA Subscriptions - External event sources.
 ///
 /// Subscriptions allow the TEA application to receive messages from
-/// external sources like timers, Tauri backend events, or window events.
+/// external sources like timers, Gossamer backend events, or window events.
 /// Ported from the PanLL TEA implementation for intsoc-transactor.
 
 /// A subscription that produces messages of type 'msg

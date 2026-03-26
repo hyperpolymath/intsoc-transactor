@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+
+[package]
+name = "intsoc-gui"
+description = "Gossamer desktop GUI for Internet Society document processing"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Gossamer webview shell
+gossamer-rs = { path = "../../gossamer/bindings/rust" }
+
+# Serialization (needed for command params/return types)
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Workspace crates (paths relative to gui/)
+intsoc-core = { path = "../crates/intsoc-core" }
+intsoc-parser = { path = "../crates/intsoc-parser" }
+intsoc-fixer = { path = "../crates/intsoc-fixer" }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[[bin]]
+name = "intsoc-gui"
+path = "backend/main.rs"
+
+[lints]
+workspace = true

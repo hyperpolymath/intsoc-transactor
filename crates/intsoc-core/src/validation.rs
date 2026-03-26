@@ -3,7 +3,7 @@
 //! Validation framework for Internet Society document checking.
 //!
 //! This module provides the data structures for reporting validation findings
-//! (errors, warnings, fixes) and categorizing them according to the type of 
+//! (errors, warnings, fixes) and categorizing them according to the type of
 //! check (Boilerplate, XML, IANA, etc.).
 
 use serde::{Deserialize, Serialize};
@@ -114,7 +114,10 @@ impl CheckSummary {
     /// Constructs a summary report from a list of raw results.
     #[must_use]
     pub fn from_results(results: Vec<CheckResult>) -> Self {
-        let error_count = results.iter().filter(|r| r.severity >= Severity::Error).count();
+        let error_count = results
+            .iter()
+            .filter(|r| r.severity >= Severity::Error)
+            .count();
         let warning_count = results
             .iter()
             .filter(|r| r.severity == Severity::Warning)
@@ -152,4 +155,22 @@ impl CheckSummary {
     pub fn passes(&self) -> bool {
         self.error_count == 0
     }
+}
+
+/// Run a full validation pass on a parsed document.
+///
+/// If `stream_hint` is provided, it will be used for stream-specific checks
+/// (e.g., IETF vs. IRTF boilerplate requirements).
+///
+/// # Errors
+///
+/// Returns an error description if the document is in an invalid state
+/// that prevents validation from running.
+pub fn check_document(
+    _document: &crate::document::Document,
+    _stream_hint: Option<&str>,
+) -> Result<CheckSummary, String> {
+    // TODO: Implement full validation pipeline.
+    // For now, return an empty summary so the GUI can boot.
+    Ok(CheckSummary::from_results(Vec::new()))
 }

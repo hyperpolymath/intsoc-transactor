@@ -104,11 +104,7 @@ async fn main() {
     let cli = Cli::parse();
 
     // Set up tracing
-    let filter = if cli.verbose {
-        "debug"
-    } else {
-        "info"
-    };
+    let filter = if cli.verbose { "debug" } else { "info" };
     tracing_subscriber::fmt()
         .with_env_filter(filter)
         .with_target(false)
@@ -124,9 +120,7 @@ async fn main() {
             dry_run,
             output,
         } => commands::fix::run(&file, auto_only, dry_run, output.as_deref(), &cli.format).await,
-        Commands::Submit { file, skip_checks } => {
-            commands::submit::run(&file, skip_checks).await
-        }
+        Commands::Submit { file, skip_checks } => commands::submit::run(&file, skip_checks).await,
         Commands::Status { name } => commands::status::run(&name, &cli.format).await,
         Commands::Init {
             name,

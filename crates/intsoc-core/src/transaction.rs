@@ -2,20 +2,20 @@
 
 //! Submission Transaction — Lifecycle State Tracking.
 //!
-//! This module implements the `Transaction` entity, which tracks the 
-//! end-to-end journey of a document from initial ingestion to successful 
+//! This module implements the `Transaction` entity, which tracks the
+//! end-to-end journey of a document from initial ingestion to successful
 //! submission to the Datatracker.
 //!
 //! AUDIT TRAIL:
-//! Every transaction records the specific validation findings (`check_results`), 
-//! the remediation actions taken (`fixes_applied`), and the outcome 
+//! Every transaction records the specific validation findings (`check_results`),
+//! the remediation actions taken (`fixes_applied`), and the outcome
 //! of each network submission attempt.
 
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
 use crate::document::Document;
 use crate::stream::Stream;
 use crate::validation::CheckResult;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 /// TRANSACTION: The stateful container for a submission session.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -49,4 +49,20 @@ pub struct FixRecord {
     pub description: String,
     pub applied_at: DateTime<Utc>,
     pub diff: String, // Unified diff of the change.
+}
+
+/// SUBMISSION ATTEMPT: Records one attempt to submit the document to the
+/// IETF Datatracker, including the HTTP outcome and any error details.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SubmissionAttempt {
+    /// Monotonically increasing attempt number (1-based)
+    pub attempt_number: u32,
+    /// Timestamp of the submission attempt
+    pub submitted_at: DateTime<Utc>,
+    /// HTTP status code returned by the Datatracker API
+    pub status_code: Option<u16>,
+    /// Whether the attempt was accepted
+    pub accepted: bool,
+    /// Error message if submission failed
+    pub error: Option<String>,
 }

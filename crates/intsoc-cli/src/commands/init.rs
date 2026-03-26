@@ -14,9 +14,7 @@ pub async fn run(
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Validate draft name format
     if !name.starts_with("draft-") {
-        return Err(format!(
-            "Draft name must start with 'draft-', got '{name}'"
-        ).into());
+        return Err(format!("Draft name must start with 'draft-', got '{name}'").into());
     }
 
     tracing::info!("Initializing draft: {name} (stream: {stream})");

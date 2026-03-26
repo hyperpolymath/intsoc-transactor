@@ -19,7 +19,9 @@ impl FixGenerator for SectionFixGenerator {
     fn generate(&self, document: &Document, results: &[CheckResult]) -> Vec<Fix> {
         results
             .iter()
-            .filter(|r| r.category == CheckCategory::Sections || r.category == CheckCategory::IanaSections)
+            .filter(|r| {
+                r.category == CheckCategory::Sections || r.category == CheckCategory::IanaSections
+            })
             .filter_map(|r| generate_section_fix(document, r))
             .collect()
     }

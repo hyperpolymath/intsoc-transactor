@@ -33,7 +33,7 @@ type model = {
  * ASYNCHRONOUS PATTERN: 
  * - User triggers an action (e.g., `RunCheck`).
  * - Update function returns a new model (`checkState: Loading`) and 
- *   a Command (`Tea_Cmd.call`) to invoke the Rust backend via Tauri.
+ *   a Command (`Tea_Cmd.call`) to invoke the Rust backend.
  * - When the Rust backend returns, it enqueues a completion message 
  *   (`CheckCompleted`), which the Update function then processes.
  */

@@ -2,7 +2,7 @@
 
 //! Internet Society API Interface Layer.
 //!
-//! This crate provides the network-facing components of the transactor, 
+//! This crate provides the network-facing components of the transactor,
 //! implementing asynchronous clients for the formal IETF and IANA services.
 //!
 //! SERVICES:

@@ -2,8 +2,8 @@
 
 //! Internet Society Document Domain Model.
 //!
-//! This module defines the primary entities and value objects used to represent 
-//! IETF Internet-Drafts and RFCs. It encodes the formal requirements of 
+//! This module defines the primary entities and value objects used to represent
+//! IETF Internet-Drafts and RFCs. It encodes the formal requirements of
 //! RFC 7991 (XML v3) and RFC 8179 (IPR) into Rust's type system.
 
 use crate::stream::Stream;
@@ -50,6 +50,20 @@ pub enum Category {
     Historic,
 }
 
+impl Category {
+    /// Returns the XML v3 attribute value for this category (RFC 7991).
+    #[must_use]
+    pub const fn xml_value(self) -> &'static str {
+        match self {
+            Self::StandardsTrack => "std",
+            Self::Informational => "info",
+            Self::Experimental => "exp",
+            Self::BestCurrentPractice => "bcp",
+            Self::Historic => "historic",
+        }
+    }
+}
+
 /// Metadata for a document contributor.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Author {
@@ -59,6 +73,17 @@ pub struct Author {
     pub organization: Option<String>,
     pub email: Option<String>,
     pub role: Option<String>, // e.g., "editor"
+}
+
+/// A bibliographic reference (normative or informative).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Reference {
+    /// Anchor identifier used in the document (e.g. "RFC8174")
+    pub anchor: String,
+    /// Full display title of the referenced document
+    pub title: String,
+    /// Target URI (e.g. the DOI or RFC URL)
+    pub target: Option<String>,
 }
 
 /// The core Document record.
@@ -98,11 +123,58 @@ pub struct Document {
     /// Supporting/contextual references
     pub informative_references: Vec<Reference>,
 
+    /// Intended status category (Standards Track, Informational, etc.)
+    pub category: Option<Category>,
+
+    /// Abstract text extracted from the document
+    pub abstract_text: Option<String>,
+
+    /// IANA considerations section content
+    pub iana_considerations: Option<String>,
+
+    /// Whether the document contains the required IETF Trust boilerplate
+    pub has_boilerplate: bool,
+
     /// Raw source text or XML
     pub source: String,
+
+    /// History of previous submissions/revisions
+    pub submission_history: Vec<String>,
+
+    /// List of document names this document obsoletes
+    pub obsoletes: Vec<String>,
+
+    /// List of document names this document updates
+    pub updates: Vec<String>,
+}
+
+/// Parsed components of an IETF draft name (e.g. "draft-ietf-httpbis-priority-00").
+#[derive(Debug, Clone)]
+pub struct DraftNameParts {
+    /// The source stream and working-group portion (e.g. "ietf-httpbis-priority")
+    pub source_and_name: String,
+    /// The revision number suffix (e.g. 0)
+    pub version: u32,
 }
 
 impl Document {
+    /// Parses a draft name into its constituent parts.
+    ///
+    /// Expects the format `draft-<source-and-name>-<version>` where version
+    /// is a two-digit number.
+    #[must_use]
+    pub fn parse_draft_name(name: &str) -> Option<DraftNameParts> {
+        let stripped = name.strip_prefix("draft-")?;
+        let last_dash = stripped.rfind('-')?;
+        let version_str = &stripped[last_dash + 1..];
+        let version: u32 = version_str.parse().ok()?;
+        let source_and_name = stripped[..last_dash].to_string();
+        Some(DraftNameParts {
+            source_and_name,
+            version,
+        })
+    }
+
     /// FACTORY: Creates a initialized document with default settings.
     #[must_use]
     pub fn new(name: String, stream: Stream) -> Self {

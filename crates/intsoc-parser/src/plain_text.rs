@@ -60,11 +60,7 @@ fn parse_header(lines: &[&str], doc: &mut Document) {
                     doc.authors.push(Author {
                         fullname: name.to_string(),
                         initials: None,
-                        surname: name
-                            .split_whitespace()
-                            .last()
-                            .unwrap_or("")
-                            .to_string(),
+                        surname: name.split_whitespace().last().unwrap_or("").to_string(),
                         organization: None,
                         email: None,
                         role: None,

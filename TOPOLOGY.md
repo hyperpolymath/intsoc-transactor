@@ -38,14 +38,14 @@
             └───────────────────────────────────────────────┘
 
             ┌───────────────────────────────────────────────┐
-            │              GUI (Tauri 2.0)                  │
+            │              GUI (Gossamer)                    │
             │  ┌──────────────────────────────────────────┐ │
             │  │         ReScript TEA Frontend            │ │
             │  │  Editor ─ Checker ─ Fixer ─ Submitter    │ │
             │  └──────────────────────────────────────────┘ │
             │  ┌──────────────────────────────────────────┐ │
-            │  │            src-tauri (Rust)               │ │
-            │  │    Tauri commands ←→ core/parser/fixer    │ │
+            │  │          backend/ (Rust+Gossamer)         │ │
+            │  │  Gossamer commands ←→ core/parser/fixer   │ │
             │  └──────────────────────────────────────────┘ │
             └───────────────────────────────────────────────┘
 
@@ -73,7 +73,7 @@
 | intsoc-cli             | `██████░░░░` 60%              | Phase 1 MVP |
 | intsoc-git             | `███░░░░░░░` 30%              | Phase 1     |
 | intsoc-api             | `████░░░░░░` 40%              | Phase 1     |
-| GUI (Tauri+ReScript)   | `██░░░░░░░░` 20%              | Phase 1     |
+| GUI (Gossamer+ReScript)| `██░░░░░░░░` 20%              | Phase 1     |
 | Nickel templates       | `█████░░░░░` 50%              | Phase 1     |
 | Haskell parser         | `░░░░░░░░░░` 5%               | Phase 2     |
 | Idris2 ABI + Zig FFI   | `░░░░░░░░░░` 5%               | Phase 3     |
@@ -90,6 +90,6 @@
 | gix         | 0.68    | Git integration (pure Rust)       |
 | reqwest     | 0.12    | HTTP client (rustls-tls)          |
 | clap        | 4       | CLI argument parsing              |
-| tauri       | 2       | Desktop application framework     |
+| gossamer-rs | 0.1     | Gossamer webview shell bindings   |
 | nickel      | CLI     | Template rendering + contracts    |
 | megaparsec  | 9.6     | Haskell parser combinators (Ph.2) |

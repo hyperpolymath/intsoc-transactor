@@ -3,7 +3,7 @@
 //! Fix Engine Core Logic.
 //!
 //! This module orchestrates the automatic remediation of validation findings.
-//! It transforms `CheckResult` findings into concrete `Fix` operations and 
+//! It transforms `CheckResult` findings into concrete `Fix` operations and
 //! applies them to the document source code.
 
 use intsoc_core::document::Document;
@@ -41,11 +41,7 @@ impl FixEngine {
     }
 
     /// EXECUTION: Applies all `AutoSafe` (high-confidence) fixes from a plan.
-    pub fn apply_auto_safe(
-        &self,
-        source: &str,
-        plan: &FixPlan,
-    ) -> Result<String, FixError> {
+    pub fn apply_auto_safe(&self, source: &str, plan: &FixPlan) -> Result<String, FixError> {
         let safe_fixes: Vec<&Fix> = plan
             .fixes
             .iter()
@@ -56,11 +52,7 @@ impl FixEngine {
     }
 
     /// EXECUTION: Sequentially applies a list of specific fixes to the document.
-    pub fn apply_fixes(
-        &self,
-        source: &str,
-        fixes: &[&Fix],
-    ) -> Result<String, FixError> {
+    pub fn apply_fixes(&self, source: &str, fixes: &[&Fix]) -> Result<String, FixError> {
         let mut result = source.to_string();
 
         for fix in fixes {
