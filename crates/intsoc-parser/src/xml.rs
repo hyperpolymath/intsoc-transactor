@@ -151,7 +151,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
         let parts: Vec<&str> = doc
             .name
             .strip_prefix("draft-ietf-")
-            .unwrap()
+            .expect("TODO: handle error")
             .splitn(2, '-')
             .collect();
         if !parts.is_empty() {
@@ -163,7 +163,7 @@ pub fn parse_xml(source: &str) -> Result<Document, ParseError> {
         let parts: Vec<&str> = doc
             .name
             .strip_prefix("draft-irtf-")
-            .unwrap()
+            .expect("TODO: handle error")
             .splitn(2, '-')
             .collect();
         if !parts.is_empty() {

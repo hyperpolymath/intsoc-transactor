@@ -186,7 +186,7 @@ mod tests {
 
     #[test]
     fn test_parse_empty() {
-        let doc = parse_plain_text("").unwrap();
+        let doc = parse_plain_text("").expect("TODO: handle error");
         assert_eq!(doc.format, DocumentFormat::PlainText);
     }
 }

@@ -1,8 +1,7 @@
-// intsoc-transactor FFI Implementation
+// INTSOC_TRANSACTOR FFI Implementation
 //
-// Implements the C-compatible FFI declared in src/abi/Foreign.idr.
-// Bridges Haskell parser library to Rust core via Zig.
-// Phase 3: All types and layouts must match the Idris2 ABI definitions.
+// This module implements the C-compatible FFI declared in src/abi/Foreign.idr
+// All types and layouts must match the Idris2 ABI definitions.
 //
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
@@ -10,7 +9,7 @@ const std = @import("std");
 
 // Version information (keep in sync with project)
 const VERSION = "0.1.0";
-const BUILD_INFO = "intsoc-transactor built with Zig " ++ @import("builtin").zig_version_string;
+const BUILD_INFO = "INTSOC_TRANSACTOR built with Zig " ++ @import("builtin").zig_version_string;
 
 /// Thread-local error storage
 threadlocal var last_error: ?[]const u8 = null;

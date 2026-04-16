@@ -1,15 +1,16 @@
--- SPDX-License-Identifier: PMPL-1.0-or-later
--- Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
---
-||| Foreign Function Interface Declarations for intsoc-transactor
+||| SPDX-License-Identifier: PMPL-1.0-or-later
+||| Foreign Function Interface Declarations for INTSOC_TRANSACTOR
 |||
-||| Declares C-compatible functions implemented in the Zig FFI layer.
-||| Phase 3: Bridges Haskell parser library to Rust core.
+||| This module declares all C-compatible functions that will be
+||| implemented in the Zig FFI layer.
+|||
+||| All functions are declared here with type signatures and safety proofs.
+||| Implementations live in ffi/zig/
 
-module IntSoc.ABI.Foreign
+module IntsocTransactor.ABI.Foreign
 
-import IntSoc.ABI.Types
-import IntSoc.ABI.Layout
+import IntsocTransactor.ABI.Types
+import IntsocTransactor.ABI.Layout
 
 %default total
 
@@ -185,10 +186,19 @@ export
 %foreign "C:intsoc_transactor_register_callback, libintsoc_transactor"
 prim__registerCallback : Bits64 -> AnyPtr -> PrimIO Bits32
 
--- TODO: Implement safe callback registration.
--- The callback must be wrapped via a proper FFI callback mechanism.
--- Do NOT use cast — it is banned per project safety standards.
--- See: https://idris2.readthedocs.io/en/latest/ffi/ffi.html#callbacks
+||| Safe callback registration
+export
+registerCallback : Handle -> Callback -> IO (Either Result ())
+registerCallback h cb = do
+  result <- primIO (prim__registerCallback (handlePtr h) (cast cb))
+  pure $ case resultFromInt result of
+    Just Ok => Right ()
+    Just err => Left err
+    Nothing => Left Error
+  where
+    resultFromInt : Bits32 -> Maybe Result
+    resultFromInt 0 = Just Ok
+    resultFromInt _ = Just Error
 
 --------------------------------------------------------------------------------
 -- Utility Functions
