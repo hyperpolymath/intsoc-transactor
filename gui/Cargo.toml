@@ -12,7 +12,7 @@ rust-version.workspace = true
 
 [dependencies]
 # Gossamer webview shell
-gossamer-rs = { path = "../../gossamer/bindings/rust" }
+gossamer-rs = { path = "../../../gossamer/bindings/rust" }
 
 # Serialization (needed for command params/return types)
 serde = { workspace = true }
