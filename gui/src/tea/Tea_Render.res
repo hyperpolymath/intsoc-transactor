@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 /// TEA Render - DOM rendering with virtual DOM diffing and event management.
 ///

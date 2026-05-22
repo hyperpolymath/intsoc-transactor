@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # ⚠️ STOP - CRITICAL READING REQUIRED
 
 **THIS FILE MUST BE READ FIRST BY ALL AI AGENTS**
@@ -55,7 +55,7 @@ Policy enforcement contracts: k9, dust, lust, must, trust
 
 1. **No state file duplication** - Root must NOT contain STATE.a2ml, META.a2ml, etc.
 2. **Single source of truth** - `.machine_readable/` is authoritative
-3. **License consistency** - All code PMPL-1.0-or-later
+3. **License consistency** - All code MPL-2.0
 4. **Author attribution** - Always "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
 5. **No banned languages** - No TypeScript, no Node.js, no Python, no Go
 6. **Container standard** - Containerfile (never Dockerfile), Podman (never Docker)
@@ -127,5 +127,5 @@ intsoc-transactor/
 - **Format Version:** 1.0.0
 - **Created:** 2026-02-20
 - **Maintained By:** Jonathan D.A. Jewell (hyperpolymath)
-- **License:** PMPL-1.0-or-later
+- **License:** MPL-2.0
 - **Protocol:** https://github.com/hyperpolymath/0-ai-gatekeeper-protocol

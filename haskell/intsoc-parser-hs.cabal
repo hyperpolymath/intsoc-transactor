@@ -1,4 +1,4 @@
--- SPDX-License-Identifier: PMPL-1.0-or-later
+-- SPDX-License-Identifier: MPL-2.0
 -- Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 cabal-version: 3.0
@@ -10,7 +10,7 @@ description:
   references. Compiled as a C-callable shared library for FFI integration
   with the Rust core.
 license:       MPL-2.0
--- PMPL-1.0-or-later preferred; MPL-2.0 required for Hackage/Cabal ecosystem
+-- MPL-2.0 preferred; MPL-2.0 required for Hackage/Cabal ecosystem
 license-file:  ../LICENSE
 author:        Jonathan D.A. Jewell
 maintainer:    j.d.a.jewell@open.ac.uk

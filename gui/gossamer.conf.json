@@ -90,7 +90,7 @@
     "icon": [],
     "resources": [],
     "copyright": "Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath)",
-    "license": "PMPL-1.0-or-later",
+    "license": "MPL-2.0",
     "shortDescription": "IETF document processing tool",
     "longDescription": "Internet Society document processing tool for validating and fixing Internet-Drafts using idnits and xml2rfc.",
     "linux": {
