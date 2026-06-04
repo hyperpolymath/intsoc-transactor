@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Fix Engine Core Logic.
 //!
 //! This module orchestrates the automatic remediation of validation findings.

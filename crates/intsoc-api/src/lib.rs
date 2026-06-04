@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Internet Society API Interface Layer.
 //!
 //! This crate provides the network-facing components of the transactor,

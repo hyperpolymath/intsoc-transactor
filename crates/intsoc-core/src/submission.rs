@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Submission Status — Datatracker Query Interface.
 //!
 //! This module provides a stub for querying the IETF Datatracker for

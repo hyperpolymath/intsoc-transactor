@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! The `init` command: initialize a new draft from a Nickel template.
 
 use intsoc_nickel::NickelWorkspace;

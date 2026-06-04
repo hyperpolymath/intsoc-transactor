@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Fix types shared between core and fixer crate.
 
 use crate::validation::{CheckCategory, Fixability};

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Validation framework for Internet Society document checking.
 //!
 //! This module provides the data structures for reporting validation findings

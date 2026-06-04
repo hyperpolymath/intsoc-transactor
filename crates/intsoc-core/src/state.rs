@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! State machines for document lifecycle tracking.
 //!
 //! This module defines the core state machine architecture used to track

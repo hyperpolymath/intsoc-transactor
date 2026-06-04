@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Nickel Template Renderer — High-Assurance Logic Evaluation.
 //!
 //! This module orchestrates the evaluation of Nickel-based configuration

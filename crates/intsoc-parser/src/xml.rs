@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! RFC XML v3 (RFC 7991) parser implementation.
 //!
 //! This module uses an event-driven SAX-style parser (`quick-xml`) to efficiently
