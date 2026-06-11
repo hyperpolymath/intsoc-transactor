@@ -340,7 +340,6 @@ deps-audit:
     @command -v cargo-audit >/dev/null && cargo audit || echo "cargo-audit not installed"
     @command -v cargo-deny >/dev/null && cargo deny check || echo "cargo-deny not installed"
     @command -v trivy >/dev/null && trivy fs --severity HIGH,CRITICAL --quiet . || true
-    @command -v gitleaks >/dev/null && gitleaks detect --source . --no-git --quiet || true
     @echo "Audit complete"
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -446,7 +445,6 @@ install-hooks:
 # Run security audit
 security: deps-audit
     @echo "=== Security Audit ==="
-    @command -v gitleaks >/dev/null && gitleaks detect --source . --verbose || true
     @command -v trivy >/dev/null && trivy fs --severity HIGH,CRITICAL . || true
     @echo "Security audit complete"
 
@@ -763,3 +761,6 @@ aspect:
     #!/usr/bin/env bash
     set -euo pipefail
     bash tests/aspect/aspect_tests.sh
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true
