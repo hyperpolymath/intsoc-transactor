@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: CC-BY-SA-4.0
 // Template: QUICKSTART-USER.adoc — 5-minute path to working software
 // Replace intsoc-transactor, Intsoc Transactor — See README.adoc for details., just run, Intsoc Transactor started successfully. with actuals
 = intsoc-transactor — Quick Start for Users
