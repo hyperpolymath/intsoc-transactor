@@ -1,0 +1,7 @@
+{
+  "name": "intsoc-transactor",
+  "private": true,
+  "devDependencies": {
+    "prettier": "3.10.1"
+  }
+}
